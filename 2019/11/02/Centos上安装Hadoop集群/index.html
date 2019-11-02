@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Centos上安装Hadoop集群 - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i>  </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>HOME</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>TAGS</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>ARCHIVES</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>ABOUT</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i>  </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Centos上安装Hadoop集群
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2019-11-02 15:55:00</span></span>
+        
+        </span>
+        <span class="attr">Visit：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>参考：<a href="https://blog.csdn.net/pucao_cug/article/details/71698903" target="_blank" rel="noopener">https://blog.csdn.net/pucao_cug/article/details/71698903</a><br>大体于参考的博客相同，有小部分区别：</p>
+</blockquote>
+<p>出现错误：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Starting namenodes on [hadoopm]</span><br><span class="line">ERROR: Attempting to operate on hdfs namenode as root</span><br><span class="line">ERROR: but there is no HDFS_NAMENODE_USER defined. Aborting operation.</span><br><span class="line">Starting datanodes</span><br><span class="line">ERROR: Attempting to operate on hdfs datanode as root</span><br><span class="line">ERROR: but there is no HDFS_DATANODE_USER defined. Aborting operation.</span><br><span class="line">Starting secondary namenodes [hadoopm]</span><br><span class="line">ERROR: Attempting to operate on hdfs secondarynamenode as root</span><br><span class="line">ERROR: but there is no HDFS_SECONDARYNAMENODE_USER defined. Aborting operation.</span><br><span class="line">Starting resourcemanager</span><br><span class="line">ERROR: Attempting to operate on yarn resourcemanager as root</span><br><span class="line">ERROR: but there is no YARN_RESOURCEMANAGER_USER defined. Aborting operation.</span><br><span class="line">Starting nodemanagers</span><br><span class="line">ERROR: Attempting to operate on yarn nodemanager as root</span><br><span class="line">ERROR: but there is no YARN_NODEMANAGER_USER defined. Aborting operation.</span><br></pre></td></tr></table></figure>
+<p>原因：缺少用户定义<br>解决方式：<br>$ vim sbin/start-dfs.sh<br>$ vim sbin/stop-dfs.sh<br>在顶部空白处添加内容：<br>（Hadoop3.0前的版本）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HDFS_DATANODE_USER=root</span><br><span class="line">HADOOP_SECURE_DN_USER=hdfs</span><br><span class="line">HDFS_NAMENODE_USER=root</span><br><span class="line">HDFS_SECONDARYNAMENODE_USER=root</span><br></pre></td></tr></table></figure>
+
+<p>（Hadoop3.0后的版本）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HDFS_DATANODE_USER=root  </span><br><span class="line">HDFS_DATANODE_SECURE_USER=hdfs  </span><br><span class="line">HDFS_NAMENODE_USER=root  </span><br><span class="line">HDFS_SECONDARYNAMENODE_USER=root</span><br></pre></td></tr></table></figure>
+
+<p>$ vim sbin/start-yarn.sh<br>$ vim sbin/stop-yarn.sh<br>在顶部空白处添加内容：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">YARN_RESOURCEMANAGER_USER=root</span><br><span class="line">HADOOP_SECURE_DN_USER=yarn</span><br><span class="line">YARN_NODEMANAGER_USER=root</span><br></pre></td></tr></table></figure>
+
+<p><strong>2、命令来查看HDFS文件系统，结果发现报错</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop01 hadoop-<span class="number">2.9</span>.<span class="number">1</span>]<span class="comment"># hadoop fs -ls /*</span></span><br><span class="line">bash: hadoop: 未找到命令...</span><br></pre></td></tr></table></figure>
+<p>原因：未配置Hadoop的环境变量<br>配置环境变量</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HADOOP_HOME=你的hadoop安装路径</span><br><span class="line">export PATH=<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+<p><strong>3、datanode没有启动</strong><br>在使用start-all.sh启动hadoop的时候，会发现，主节点namenode是启动了，但是分节点datanode启动失败。继续观察，会发现一开始是有datanode的，但它在启动后一会儿自动消失了。<br>可能原因网上讲了一些：<br>1、防火墙没关（注意区分centOS6和centOS7关闭防火墙的命令是不一样的）。<br>2、打开hdfs-site.xml里配置的datanode和namenode对应的目录，分别打开current文件夹里的VERSION，可以看到clusterID项正如日志里记录的一样，确实不一致。</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop01 sbin]<span class="comment">#  cat /root/hadoop/dfs/name/current/VERSION</span></span><br><span class="line"><span class="comment">#Fri Jul 13 23:04:07 CST 2018</span></span><br><span class="line">namespaceID=<span class="number">781012180</span></span><br><span class="line">clusterID=CID-b6934b47-<span class="number">4</span>a9a-<span class="number">4</span>e4c-<span class="number">8291</span>-cd153ef830ba</span><br><span class="line">cTime=<span class="number">1531494247761</span></span><br><span class="line">storageType=NAME_NODE</span><br><span class="line">blockpoolID=BP-<span class="number">485123232</span>-<span class="number">10.25</span>.<span class="number">0.165</span>-<span class="number">1531494247761</span></span><br><span class="line">layoutVersion=-<span class="number">63</span></span><br><span class="line">[root@hadoop01 sbin]<span class="comment">#  cat /root/hadoop/dfs/data/current/VERSION</span></span><br><span class="line"><span class="comment">#Fri Jul 13 18:27:19 CST 2018</span></span><br><span class="line">storageID=DS-b3dda351-<span class="number">22</span>bb-<span class="number">4423</span>-b058-df3b5af962ae</span><br><span class="line">clusterID=hadoop-federation-clusterId</span><br><span class="line">cTime=<span class="number">0</span></span><br><span class="line">datanodeUuid=<span class="number">9241</span>c115-<span class="number">8068</span>-<span class="number">46</span>d4-<span class="number">956</span>b-eb86b8b37b49</span><br><span class="line">storageType=DATA_NODE</span><br><span class="line">layoutVersion=-<span class="number">57</span></span><br><span class="line">[root@hadoop01 sbin]<span class="comment">#</span></span><br></pre></td></tr></table></figure>
+
+<p>修改datanode里VERSION文件的clusterID 与namenode里的一致，再重新启动dfs（执行start-all.sh）再执行jps命令可以看到datanode已正常启动。<br>3、配置slavs出错</p>
+<p><strong>备注：hadoop3以后有一个workers文件用来存储slaves,对应的是datanode.</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@master hadoop]<span class="comment"># cat /opt/hadoop/etc/hadoop/workers</span></span><br><span class="line">node1</span><br><span class="line">node2</span><br></pre></td></tr></table></figure>
+
+<p><strong>4、查看</strong><br>Hadoop3.0之后端口改为了<strong>9870</strong><br>Hadoop3.0前为<strong>50070</strong><br>在主节点的Centos系统中输入网址 <strong><a href="http://localhost:9870/" target="_blank" rel="noopener">http://localhost:9870/</a></strong> 即可查看</p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
