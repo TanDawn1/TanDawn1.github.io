@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Java集合List的实现原理 - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i>  </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>HOME</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>TAGS</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>ARCHIVES</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>ABOUT</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i>  </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Java集合List的实现原理
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2019-11-02 18:08:57</span></span>
+        
+        </span>
+        <span class="attr">Visit：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>参考：<a href="https://www.cnblogs.com/kanglijun/p/10999247.html" target="_blank" rel="noopener">https://www.cnblogs.com/kanglijun/p/10999247.html</a></p>
+</blockquote>
+<p><strong>一、集合类结构</strong></p>
+<blockquote>
+<p>Java中的集合包含多种数据结构，如链表、队列、哈希表等。从类的继承结构来说，可以分为两大类，一类是继承自Collection接口，这类集合包含List、Set和Queue等集合类。另一类是继承自Map接口，这主要包含了哈希表相关的集合类。</p>
+</blockquote>
+<p><strong>1.继承Collection接口</strong><br><img src="/2019/11/02/Java集合List的实现原理/Collection.jpg" alt="Collection"><br><strong>2.继承Map接口</strong><br><img src="/2019/11/02/Java集合List的实现原理/Map.jpg" alt="Map"><br><strong>二、实现原理</strong><br><strong>1.List （有序，可重复）</strong></p>
+<blockquote>
+<p>常用的实现List接口的主要有ArrayList、Vector、LinkedList 三个</p>
+</blockquote>
+<p><strong>（1）ArrayList</strong></p>
+<p><strong>实现原理：</strong><br>ArrayList底层实现采用的数据结构是数组，并且数组默认大小为10，所以下面两种方式是等同的：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List list = <span class="keyword">new</span> ArrayList();  <span class="comment">//没有指定数组大小，使用默认值（默认大小是10）</span></span><br><span class="line"></span><br><span class="line">List list = <span class="keyword">new</span> ArrayList(<span class="number">10</span>);  <span class="comment">// 指定数组大小为10，传如的参数便是数组的大小，传入为10时，跟默认值相同，所以是等同的</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：不同的jdk版本实现代码有所不同, 现以jdk1.8为例（个人感觉<br>jdk1.6的底层实现写法更好理解，jdk1.8就比1.6较难懂一些）</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 无参构造器</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">()</span> </span>&#123;</span><br><span class="line"><span class="keyword">this</span>.elementData = DEFAULTCAPACITY_EMPTY_ELEMENTDATA;   <span class="comment">// DEFAULTCAPACITY_EMPTY_ELEMENTDATA是一个默认大小的空实例</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 有参构造器，参数为列表的初始容量（由于是通过数组实现的，所以可以理解成数组的大小）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ArrayList</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">　　<span class="keyword">if</span> (initialCapacity &gt; <span class="number">0</span>) &#123;</span><br><span class="line">　　　　<span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">　　&#125; <span class="keyword">else</span> <span class="keyword">if</span> (initialCapacity == <span class="number">0</span>) &#123;</span><br><span class="line">　　　　<span class="keyword">this</span>.elementData = EMPTY_ELEMENTDATA;</span><br><span class="line">　　&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">　　　　<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal Capacity: "</span>+initialCapacity);</span><br><span class="line">　　&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>扩容机制：</strong><br>jdk1.8的扩容算法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">newCapacity = oldCapacity + ( oldCapacity &gt;&gt; <span class="number">1</span> ) ;   <span class="comment">// oldCapacity &gt;&gt; 2`</span></span><br></pre></td></tr></table></figure>
+
+<p> 移位运算，此处相当于oldCapacity除以2，但是 &gt;&gt; 这种写法更加高效</p>
+<p>jdk1.6的扩容算法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">newCapacity = ( oldCapacity * <span class="number">3</span> ) / <span class="number">2</span> +<span class="number">1</span> ;</span><br></pre></td></tr></table></figure>
+
+<p>参数介绍：newCapacity 是扩容后的容量大小，oldCapacity 是扩容前的大小<br><strong>（2）Vector</strong></p>
+<blockquote>
+<p>Vector的底层也是通过数组实现的，默认大小也是10。主要特点：查询快，增删慢  ， 线程安全，但是效率低</p>
+</blockquote>
+<p><strong>实现原理：</strong></p>
+<p>创建对象与ArrayList类似，但有一点不同，它可以设置扩容是容量增长大小。</p>
+<p>根据Vector的三个构造器就可以很明了的理解 new Vector(); 与 new Vector(10);与 new Vector(10,0); 三个是等同的，很明了就不赘述了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.无参构造器</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="title">Vector</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(<span class="number">10</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>.传一个参数（容量大小） 容量大小即底层数组大小</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Vector</span><span class="params">(<span class="keyword">int</span> initialCapacity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>(initialCapacity, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>.传两个参数（容量大小，容量修正） 容量修正即扩容时的增加量</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Vector</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">int</span> capacityIncrement)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>();</span><br><span class="line">        <span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal Capacity: "</span>+</span><br><span class="line">                                               initialCapacity);</span><br><span class="line">        <span class="keyword">this</span>.elementData = <span class="keyword">new</span> Object[initialCapacity];</span><br><span class="line">        <span class="keyword">this</span>.capacityIncrement = capacityIncrement;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>（3）LinkedList</strong></p>
+<blockquote>
+<p>LinkedList底层是一个双向链表，它增删快，效率高，但是查询慢，线程不安全</p>
+</blockquote>
+<p><strong>实现原理：</strong><br>构造器只有如下两种;</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.无参构造</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="number">2</span>.有参构造</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LinkedList</span><span class="params">(Collection&lt;? extends E&gt; c)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>();</span><br><span class="line">        addAll(c);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>由于它的底层实现是链表，所以没有容量大小的定义，只有上个节点，当前节点，下个节点，每个节点都有一个上级节点和一个下级节点。</p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
