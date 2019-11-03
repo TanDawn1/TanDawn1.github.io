@@ -11,7 +11,7 @@
 
     <title>
         
-        TanDawn的博客 | TanDawn&#39;s Blog
+        HDFS分布式文件系统 - TanDawn的博客 | TanDawn&#39;s Blog
         
     </title>
 
@@ -59,7 +59,7 @@
                     <span>主页</span>
                 </a>
             </li>
-            <li  class=active >
+            <li >
                 <a href="/tags">
                     <i class="iconfont icon-biaoqian1"></i>
                     <span>标签</span>
@@ -80,6 +80,10 @@
             
         </ul>
     </div>
+    
+        <div id="toc" class="toc-article">
+    
+</div>
     
 </div>
 
@@ -105,6 +109,56 @@
     <div class="index-middle">
         <!-- Main Content -->
         
+
+
+<div class="post-container">
+    <div class="post-title">
+        HDFS分布式文件系统
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-11-03 10:32:15</span></span>
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>为什么需要DFS：<br>一台计算机存储的容量有限，一旦数据量达到一定级别，就需要将数据存放在多台机器上，这就是分布式文件系统，称为DFS(DistributedFile System)</p>
+</blockquote>
+<p><strong>什么是DFS</strong><br>分布式文件系统DFS是基于<strong>Master/Slave</strong>模式，一个系统能提供多个供用户访问的服务器，一般都会有<strong>容错和备份</strong>的功能。<br><strong>DFS结构</strong><br>物理结构：    由计算机集群中的多个节点构成<br>节点分为两类：<br>第一类：主节点(MasterNode)也称名称节点(NameNode)<br>第二类：从节点(SlaveNode)也称数据节点(DataNode)<br><img src="https://img-blog.csdnimg.cn/20191103103516308.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="HDFS"><br><strong>HDFS的体系结构</strong>    </p>
+<blockquote>
+<p>HDFS是一个使用Java实现的分布式、可横向扩展的文件系统<br>HDFS包括一个名称节点(NameNode)和若干数据节点(DataNode),属于主从关系的结构模型<br>名称节点负责管理文件命名空间及客户端对文件的访问,即中心服务器。<br>数据节点在名称节点的调动下处理数据</p>
+</blockquote>
+<p>HDFS适合存储大量文件，总存储量可以达到PB/EB，单个文件一般在几百兆。<br>适用于处理批量数据，不适合随机定位访问<br><strong>HDFS优缺点</strong></p>
+<p>1.优点</p>
+<ul>
+<li>高容错率：数据自动保存多个副本，副本丢失后自动恢复</li>
+<li>适合批处理</li>
+<li>适合大数据处理</li>
+<li>可在廉价的机器上构建</li>
+</ul>
+<p>2.缺点</p>
+<ul>
+<li>不适合低延时数据访问:寻址时间长，适合读取大文件，低延时与高吞吐率</li>
+<li>不适合小文件存取：占用NameNode大量内存，寻找时间超过读取时间</li>
+<li>并发写入、文件随机修改：一个文件只能有一个写入者，仅支持append，不允许修改文件。</li>
+</ul>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
     </div>
 </div>
 
@@ -159,7 +213,7 @@
     // We expose some of the variables needed by the front end
     window.hexo_search_path = ""
     window.hexo_root = "/"
-    window.isPost = false
+    window.isPost = true
 </script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="/js/index.js"></script>
