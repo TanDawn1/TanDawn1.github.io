@@ -11,7 +11,7 @@
 
     <title>
         
-        TanDawn的博客 | TanDawn&#39;s Blog
+        Java多态的理解 - TanDawn的博客 | TanDawn&#39;s Blog
         
     </title>
 
@@ -53,7 +53,7 @@
     </div>
     <div class="contents" id="nav-content">
         <ul>
-            <li  class=active >
+            <li >
                 <a href="/">
                     <i class="iconfont icon-shouye1"></i>
                     <span>主页</span>
@@ -81,6 +81,10 @@
         </ul>
     </div>
     
+        <div id="toc" class="toc-article">
+    
+</div>
+    
 </div>
 
 
@@ -105,111 +109,56 @@
     <div class="index-middle">
         <!-- Main Content -->
         
-<div class="post-preview-container" style="min-height: 720px">
-    
-    <div class="post-preview">
-        <div class="post-time">2019-12-06</div>
-        <div class="post-info">
-            <a href="/2019/12/06/ava多态的理解/">
-                <h3>
-                    Java多态的理解
-                </h3>
-            </a>
-            <p>
-                
-            </p>
-        </div>
+
+
+<div class="post-container">
+    <div class="post-title">
+        Java多态的理解
     </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-04</div>
-        <div class="post-info">
-            <a href="/2019/11/04/线程-线程安全的类/">
-                <h3>
-                    多线程-线程安全的类、死锁
-                </h3>
-            </a>
-            <p>
-                
-            </p>
-        </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2019-12-06 19:19:53</span></span>
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
     </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-04</div>
-        <div class="post-info">
-            <a href="/2019/11/04/ava中的全局变量、局部变量与static/">
-                <h3>
-                    Java中的全局变量、局部变量与static
-                </h3>
-            </a>
-            <p>
-                
-            </p>
-        </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-03</div>
-        <div class="post-info">
-            <a href="/2019/11/03/HDFS分布式文件系统/">
-                <h3>
-                    HDFS分布式文件系统
-                </h3>
-            </a>
-            <p>
-                
-            </p>
-        </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-03</div>
-        <div class="post-info">
-            <a href="/2019/11/03/Java实现二叉树/">
-                <h3>
-                    Java实现二叉树
-                </h3>
-            </a>
-            <p>
-                
-            </p>
-        </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-02</div>
-        <div class="post-info">
-            <a href="/2019/11/02/Java集合List的实现原理/">
-                <h3>
-                    Java集合List的实现原理
-                </h3>
-            </a>
-            <p>
-                
-            </p>
-        </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-02</div>
-        <div class="post-info">
-            <a href="/2019/11/02/Centos上安装Hadoop集群/">
-                <h3>
-                    Centos上安装Hadoop集群
-                </h3>
-            </a>
-            <p>
-                
-            </p>
-        </div>
-    </div>
-    
-</div>
-<ul class="pager">
-    
-    
+    <div class="post-content no-indent">
+        <p><strong>编译时多态</strong></p>
+<ul>
+<li>编译期间决定目标方法</li>
+<li>通过overloading重载实现</li>
+<li>方法名相同，参数不同</li>
 </ul>
+<p><strong>运行时多态</strong></p>
+<ul>
+<li>运行期间决定目标方法</li>
+<li>同名同参</li>
+<li>overriding和继承实现</li>
+<li>JVM决定目标的方法</li>
+</ul>
+<p><strong>运行时多态的实现机制</strong></p>
+<ul>
+<li>JVM方法区</li>
+<li>invokeVirtual指令调用方法区方法</li>
+<li>方法表（存放方法入口地址）</li>
+</ul>
+<ul>
+<li>invokeVirtual index</li>
+</ul>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
 
     </div>
 </div>
@@ -265,7 +214,7 @@
     // We expose some of the variables needed by the front end
     window.hexo_search_path = ""
     window.hexo_root = "/"
-    window.isPost = false
+    window.isPost = true
 </script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="/js/index.js"></script>
