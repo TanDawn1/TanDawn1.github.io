@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        计算机网络常见面试题(扩充） - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code,sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP1与HTTP2的主要区别"><span class="toc-text">HTTP1与HTTP2的主要区别</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP1-x"><span class="toc-text">HTTP1.x</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#缺陷："><span class="toc-text">缺陷：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP1-0"><span class="toc-text">HTTP1.0</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#缺陷：-1"><span class="toc-text">缺陷：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决方案："><span class="toc-text">解决方案：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP1-1"><span class="toc-text">HTTP1.1</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#改进点："><span class="toc-text">改进点：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#缺点："><span class="toc-text">缺点：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#避免方式："><span class="toc-text">避免方式：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP-2-0："><span class="toc-text">HTTP/2.0：</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#特点"><span class="toc-text">特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-二进制协议"><span class="toc-text">1. 二进制协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-完全多路复用（多路复用的单一长连接）"><span class="toc-text">2. 完全多路复用（多路复用的单一长连接）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#a-单一长链接"><span class="toc-text">a.单一长链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-多路复用"><span class="toc-text">b.多路复用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#c-报头压缩"><span class="toc-text">c.报头压缩</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#b-服务器推送"><span class="toc-text">b.服务器推送</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HTTP和HTTPS有什么不同"><span class="toc-text">HTTP和HTTPS有什么不同</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP和HTTPS是什么？"><span class="toc-text">HTTP和HTTPS是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP协议"><span class="toc-text">HTTP协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS协议"><span class="toc-text">HTTPS协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTP和HTTPS的其他不同"><span class="toc-text">HTTP和HTTPS的其他不同</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HTTPS安全的局限性"><span class="toc-text">HTTPS安全的局限性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP的连接管理"><span class="toc-text">TCP的连接管理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#连接三次握手"><span class="toc-text">连接三次握手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#断开连接四次握手"><span class="toc-text">断开连接四次握手</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> sometimes code,sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        计算机网络常见面试题(扩充）
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-01-21 20:33:27</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#计算机网络" title="计算机网络">计算机网络</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="HTTP1与HTTP2的主要区别"><a href="#HTTP1与HTTP2的主要区别" class="headerlink" title="HTTP1与HTTP2的主要区别"></a>HTTP1与HTTP2的主要区别</h1><p><img src="https://img-blog.csdnimg.cn/20200121193740221.png" alt="HTTP1.0-HTTP2.0"><br>Web 性能的终极目标是减少到用户端的延迟，让用户能够尽快的打开前端网页并进行相关交互。<strong>尽可能发送少的数据给服务器，从服务端下载尽可能少的数据，尽可能减少往返 （Round Trips）</strong> ，客户端与服务器无论是哪一边，额外的数据流都会带来额外的延迟开销，与此同时也更容易出现拥塞和丢包问题,这无疑严重影响了性能。 多余的 Round Trip 同样会增加延迟，尤其是在移动网络下（100ms 是让用户感觉到系统立即做出响应的时间上限）。<br><strong>HTTP/2试图解决HTTP/1.1的许多缺点和不灵活之处</strong></p>
+<h2 id="HTTP1-x"><a href="#HTTP1-x" class="headerlink" title="HTTP1.x"></a>HTTP1.x</h2><h3 id="缺陷："><a href="#缺陷：" class="headerlink" title="缺陷："></a>缺陷：</h3><p>线程阻塞，在同一时间，同一域名的请求有一定数量限制，超过限制数目的请求会被阻塞。</p>
+<h2 id="HTTP1-0"><a href="#HTTP1-0" class="headerlink" title="HTTP1.0"></a>HTTP1.0</h2><h3 id="缺陷：-1"><a href="#缺陷：-1" class="headerlink" title="缺陷："></a>缺陷：</h3><p>浏览器与服务器只保持短暂的连接，<strong>浏览器的每次请求都需要与服务器建立一个 TCP 连接</strong>（TCP 连接的新建成本很高，因为需要客户端和服务器<strong>三次握手</strong>），服务器完成请求处理后立即断开 TCP 连接，服务器不跟踪每个客户也不记录过去的请求；</p>
+<h3 id="解决方案："><a href="#解决方案：" class="headerlink" title="解决方案："></a>解决方案：</h3><p>添加头信息——非标准的 Connection 字段 Connection: keep-alive</p>
+<h2 id="HTTP1-1"><a href="#HTTP1-1" class="headerlink" title="HTTP1.1"></a>HTTP1.1</h2><h3 id="改进点："><a href="#改进点：" class="headerlink" title="改进点："></a>改进点：</h3><p><strong>1、持久连接</strong></p>
+<p>引入了持久连接，即 TCP 连接默认不关闭，可以被多个请求复用，不用声明 Connection: keep-alive(对于同一个域名，大多数浏览器允许同时建立 6 个持久连接)</p>
+<p><strong>2、管道机制</strong></p>
+<p>即在同一个 TCP 连接里面，客户端<strong>可以同时发送多个请求</strong>。</p>
+<p><strong>3、分块传输编码</strong></p>
+<p>即服务端没产生一块数据，就发送一块，<strong>采用”流模式”而取代”缓存模式”</strong>。</p>
+<p><strong>4、新增请求方式</strong></p>
+<p>PUT:请求服务器存储一个资源;<br>DELETE：请求服务器删除标识的资源；<br>OPTIONS：请求查询服务器的性能，或者查询与资源相关的选项和需求；<br>TRACE：请求服务器回送收到的请求信息，主要用于测试或诊断；<br>CONNECT：保留将来使用</p>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><p>虽然<strong>允许复用 TCP 连接，但是同一个 TCP 连接里面，所有的数据通信是按次序进行的</strong>。服务器只有处理完一个请求，才会接着处理下一个请求。如果前面的处理特别慢，后面就会有许多请求排队等着。这将导致“<strong>队头堵塞</strong>”</p>
+<h4 id="避免方式："><a href="#避免方式：" class="headerlink" title="避免方式："></a>避免方式：</h4><p>一是<strong>减少请求数</strong>（代码合并、图片精灵），二是<strong>同时多开持久连接</strong>（静态资源分布到不同的域下）。</p>
+<h2 id="HTTP-2-0："><a href="#HTTP-2-0：" class="headerlink" title="HTTP/2.0："></a>HTTP/2.0：</h2><h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>采用<strong>二进制格式</strong>而非文本格式；<strong>完全多路复用</strong>，而非有序并阻塞的、只需一个连接即可实现并行；<strong>使用报头压缩</strong>，降低开销服务器推送</p>
+<h3 id="1-二进制协议"><a href="#1-二进制协议" class="headerlink" title="1. 二进制协议"></a>1. 二进制协议</h3><p>HTTP/1.1 版的头信息肯定是文本（ASCII 编码），数据体可以是文本，也可以是二进制。HTTP/2 则是一个彻底的二进制协议，头信息和数据体都是二进制，并且统称为”帧”：头信息帧和数据帧。二进制协议解析起来更高效、“线上”更紧凑，更重要的是错误更少。</p>
+<h3 id="2-完全多路复用（多路复用的单一长连接）"><a href="#2-完全多路复用（多路复用的单一长连接）" class="headerlink" title="2. 完全多路复用（多路复用的单一长连接）"></a>2. 完全多路复用（多路复用的单一长连接）</h3><h4 id="a-单一长链接"><a href="#a-单一长链接" class="headerlink" title="a.单一长链接"></a>a.单一长链接</h4><p>在HTTP/2中，客户端向某个域名的服务器请求页面的过程中，只会创建一条TCP连接，即使这页面可能包含上百个资源。而之前的HTTP/1.x一般会创建6-8条TCP连接来请求这100多个资源。单一的连接应该是HTTP2的主要优势，单一的连接能减少TCP握手带来的时延（如果是建立在SSL/TLS上面，HTTP2能减少很多不必要的SSL握手，大家都知道SSL握手很慢吧）。</p>
+<p> 另外我们知道，TCP协议有个滑动窗口，有慢启动这回事，就是说每次建立新连接后，数据先是慢慢地传，然后滑动窗口慢慢变大，才能较高速度地传，这下倒好，这条连接的滑动窗口刚刚变大，http1.x就创个新连接传数据（这就好比人家HTTP2一直在高速上一直开着，你HTTP1.x是一辆公交车走走停停）。由于这种原因，让原本就具有突发性和短时性的 HTTP 连接变的十分低效。</p>
+<p> 所以咯，HTTP2中用一条单一的长连接，避免了创建多个TCP连接带来的网络开销，提高了吞吐量。</p>
+<h4 id="b-多路复用"><a href="#b-多路复用" class="headerlink" title="b.多路复用"></a>b.多路复用</h4><p>HTTP2把要传输的信息分割成一个个二进制帧，首部信息会被封装到HEADER Frame，相应的request body就放到DATA Frame,一个帧你可以看成路上的一辆车,只要给这些车编号，让1号车都走1号门出，2号车都走2号门出，就把不同的http请求或者响应区分开来了。但是，这里要求同一个请求或者响应的帧必须是有有序的，要保证FIFO的，但是不同的请求或者响应帧可以互相穿插。这就是HTTP2的多路复用，是不是充分利用了网络带宽，是不是提高了并发度？</p>
+<p>更进一步，http2还能对这些流(车道)指定优先级，优先级能动态的被改变，例如把CSS和JavaScript文件设置得比图片的优先级要高，这样代码文件能更快的下载下来并得到执行。</p>
+<h4 id="c-报头压缩"><a href="#c-报头压缩" class="headerlink" title="c.报头压缩"></a>c.报头压缩</h4><p>HTTP 协议是没有状态，导致每次请求都必须附上所有信息。所以，请求的很多头字段都是重复的，比如 Cookie，一样的内容每次请求都必须附带，这会浪费很多带宽，也影响速度。对于相同的头部，不必再通过请求发送，只需发送一次；HTTP/2 对这一点做了优化，引入了头信息压缩机制；一方面，头信息使用 gzip 或 compress 压缩后再发送；另一方面，客户端和服务器同时维护一张头信息表（分静态部分和动态部分），所有字段都会存入这个表，产生一个索引号，之后就不发送同样字段了，只需发送索引号。</p>
+<h4 id="b-服务器推送"><a href="#b-服务器推送" class="headerlink" title="b.服务器推送"></a>b.服务器推送</h4><p>HTTP/2 允许服务器未经请求，主动向客户端发送资源；通过推送那些服务器任务客户端将会需要的内容到客户端的缓存中，避免往返的延迟</p>
+<h1 id="HTTP和HTTPS有什么不同"><a href="#HTTP和HTTPS有什么不同" class="headerlink" title="HTTP和HTTPS有什么不同"></a>HTTP和HTTPS有什么不同</h1><h2 id="HTTP和HTTPS是什么？"><a href="#HTTP和HTTPS是什么？" class="headerlink" title="HTTP和HTTPS是什么？"></a>HTTP和HTTPS是什么？</h2><p>我们使用浏览器访问一个网站页面，在浏览器的地址栏中我们会看到一串URL，如图</p>
+<p><img src="https://img-blog.csdnimg.cn/20200121190853345.png" alt="url"><br>网站的URL会分为两部分：<strong>通信协议和域名地址。</strong></p>
+<p>域名地址都很好理解，不同的域名地址表示网站中不同的页面，而通信协议，简单来说就是浏览器和服务器之间沟通的语言。网站中的通信协议一般就是HTTP协<br>议和HTTPS协议。</p>
+<p>HTTP（HyperText Transfer Protocol）超文本传输协议，HTTPS（Hypertext Transfer Protocol Secure）超文本传输安全协议，就是HTTP的安全版本。HTTP与HTTPS都属于应用层协议，下一层是TCP（传输层协议），HTTPS没有对HTTP作任何修改，HTTPS是由HTTP进行通信，但<strong>利用SSL/TLS来加密数据包</strong>，HTTPS是在HTTP与TCP之间加了一个SSLl/TLS协议。<strong>HTTP + 加密 + 认证 + 完整性保护 = HTTPS</strong>，可以说HTTPS是披着SSL/TLS外衣的HTTP。</p>
+<p><strong>SSL/TLS</strong>：SSL/TLS是HTTP和TCP之间的中转协议，也是一个应用层协议。我们可以把SSL/TLS理解为一个黑盒子，我们把数据丢给HTTP，HTTP把数据丢给SSL/TLS，SSL/TLS把数据加密后丢给TCP，这就是HTTPS。</p>
+<h2 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h2><p><strong>端口：80</strong></p>
+<p>HTTP协议是一种使用明文数据传输的网络协议。一直以来HTTP协议都是最主流的网页协议，但是互联网发展到今天，<strong>HTTP协议的明文传输会让用户存在一个非常大的安全隐患</strong>。假如你在一个HTTP协议的网站上面购物，你需要在页面上输入你的银行卡号和密码，然后你把数据提交到服务器实现购买。假如这个适合，你的传输数据被第三者给截获了，由于<strong>HTTP明文数据传输</strong>的原因，你的银行卡号和密码，将会被这个截获人所得到。</p>
+<h2 id="HTTPS协议"><a href="#HTTPS协议" class="headerlink" title="HTTPS协议"></a>HTTPS协议</h2><p><strong>端口：443</strong></p>
+<p>HTTPS协议可以理解为HTTP协议的升级，就是在HTTP的基础上<strong>增加了数据加密</strong>。在数据进行传输之前，<strong>对数据进行加密</strong>，然后再发送到服务器。这样，就算数据被第三者所截获，但是由于数据是加密的，所以你的个人信息让然是安全的。这就是HTTP和HTTPS的最大区别。</p>
+<h2 id="HTTP和HTTPS的其他不同"><a href="#HTTP和HTTPS的其他不同" class="headerlink" title="HTTP和HTTPS的其他不同"></a>HTTP和HTTPS的其他不同</h2><p><strong>数据加密传输，是HTTP和HTTPS之间的本质性区别。</strong></p>
+<p>当你使用Chrome浏览器访问一个HTTP网站的时候，你会发现浏览器会对该HTTP网站显示“不安全”的安全警告，提示用户当前所访问的网站可能会存在风险。</p>
+<p>而假如你访问的是一个HTTPS网站时，情况却是完全不一样。你会发现浏览器的地址栏会变成绿色，企业名称会展示在地址栏中，地址栏上面还会出现一把“安全锁”的图标。这些都会给与用户很大的视觉上的安全体验。以下是<strong>EV证书</strong>在不同浏览器中的展现。</p>
+<p>除了浏览器视觉上不同以外，HTTPS网站和HTTP网站还有一个很重要的区别，就是对<strong>搜索排名</strong>的提升，这也是很多站长所关注的地方。</p>
+<p>百度和谷歌两大搜索引擎都已经明确表示，HTTPS网站将会作为搜索排名的一个重要权重指标。也就是说<strong>HTTPS网站比起HTTP网站在搜索排名中更有优势</strong>。</p>
+<h2 id="HTTPS安全的局限性"><a href="#HTTPS安全的局限性" class="headerlink" title="HTTPS安全的局限性"></a>HTTPS安全的局限性</h2><p>HTTPS因为多了一层SSL/TLS加密，以及数字证书的握手，数据的加密/解密，以及密钥的交换与确认，<strong>消耗更多的CPU和内存资源，加密范围也比较有限，黑客攻击、拒绝服务攻击、服务器劫持方面几乎起不到什么作用</strong>。最关键的，SSL证书信用链体系并不安全，特别是在某些国家可以控制CA根证书的情况下，中间攻击一样可行。<br><img src="https://img-blog.csdnimg.cn/20200121193605155.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="HTTP HTTPS"></p>
+<h1 id="TCP的连接管理"><a href="#TCP的连接管理" class="headerlink" title="TCP的连接管理"></a>TCP的连接管理</h1><p>传输控制协议（TCP，Transmission Control Protocol）是一种<strong>面向连接的、可靠的、基于字节流的传输层通信协议。</strong></p>
+<p>TCP旨在适应支持多网络应用的分层协议层次结构。 连接到不同但互连的计算机通信网络的主计算机中的成对进程之间依靠TCP提供可靠的通信服务。TCP假设它可以从较低级别的协议获得简单的，可能不可靠的数据报服务。 原则上，TCP应该能够在从硬线连接到分组交换或电路交换网络的各种通信系统之上操作。</p>
+<h2 id="连接三次握手"><a href="#连接三次握手" class="headerlink" title="连接三次握手"></a>连接三次握手</h2><p>1.客户端请求建立连接：SYN=1，seq=x；<br>2.服务器对客户端的请求进行响应：SYN=1，ACK=1，seq=y，ack=x+1<br>3.客户端对服务器端的响应信息进行回应：ACK=1，seq=x+1，ack=y+1</p>
+<p><strong>注： SYN为同步信息，在建立连接过程中始终为1</strong><br><img src="https://img-blog.csdnimg.cn/20200121202743550.gif" alt="tcp start"></p>
+<h2 id="断开连接四次握手"><a href="#断开连接四次握手" class="headerlink" title="断开连接四次握手"></a>断开连接四次握手</h2><p>1.客户端请求断开连接： FIN=1，seq = u；<br>2.服务端对客户端的请求应答：ACK=1，seq=v，ack=u+1；<br>3.服务端请求断开连接：FIN=1，ACK=1，seq=w，ack=u+1；<br>4.客户端对服务端的请求应答：ACK=1，seq=u+1，ack=w+1；<br><img src="https://img-blog.csdnimg.cn/20200121202811724.gif" alt="tcp stop"></p>
+<blockquote>
+<p>参考：<a href="https://www.jianshu.com/p/8666237e5ddd" target="_blank" rel="noopener">https://www.jianshu.com/p/8666237e5ddd</a></p>
+</blockquote>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/dawn-90-70">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/TanDawn1">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="#">友情链接</a></span>
+        <span>/</span>
+        
+        <span><a href="https://tmb115115.github.io" target="_blank" rel="noopener">Ycdi&#39;s</a></span>
+        <span>/</span>
+        
+        <span><a href="https://jiesunn.github.io" target="_blank" rel="noopener">JieSunn</a></span>
+        <span>/</span>
+        
+        <span><a href="https://me.csdn.net/weixin_43871956" target="_blank" rel="noopener">CSDN</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
