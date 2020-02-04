@@ -212,13 +212,13 @@
 <p> 作用：等同于 xml 配置文件中编写一个 标签</p>
 </li>
 </ul>
-<pre><code>- @Component
-   **形式**：@Component(value=&quot; &quot;)/@Component(&quot; &quot;)
-
-   **作用**：用于把当前类对象存入 Spring 容器中
-
-   **属性**：
-   value : 用于指定 bean 的 id，当我们不写的时候，它的默认值是当前类名，且首字母改小写;当值只有一个的时候可以省略</code></pre><p><strong>以下三个注解的作用与 @Component 完全一样，它们是 Spring 提供的更明确的划分，使三层对象更加清晰</strong></p>
+<ul>
+<li>@Component</li>
+</ul>
+<p><strong>形式</strong>：@Component(value=” “)/@Component(“ “)</p>
+<p><strong>作用</strong>：用于把当前类对象存入 Spring 容器中</p>
+<p><strong>属性</strong>：<br>    value : 用于指定 bean 的 id，当我们不写的时候，它的默认值是当前类名，且首字母改小写;当值只有一个的时候可以省略</p>
+<p><strong>以下三个注解的作用与 @Component 完全一样，它们是 Spring 提供的更明确的划分，使三层对象更加清晰</strong></p>
 <ul>
 <li>@Controller 用于表现层</li>
 <li>@Service 用于业务层</li>
@@ -272,7 +272,6 @@
 <p>作用：用于指定初始化方法</p>
 <p>测试类：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//1.获取核心容器对象</span></span><br><span class="line">        ClassPathXmlApplicationContext ac = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"bean.xml"</span>);</span><br><span class="line">        <span class="comment">//2.根据id获取Bean对象</span></span><br><span class="line">        IAccountService as  = (IAccountService)ac.getBean(<span class="string">"accountService"</span>);</span><br><span class="line"></span><br><span class="line">        as.saveAccount();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
         
         <br />
         <div id="comment-container">
