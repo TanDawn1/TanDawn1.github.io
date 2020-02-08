@@ -154,22 +154,33 @@
 <p>初始化：为类的静态变量赋予正确的初始值</p>
 <h2 id="类的使用与加载"><a href="#类的使用与加载" class="headerlink" title="类的使用与加载"></a>类的使用与加载</h2><ul>
 <li>使用</li>
-<li>加载</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20200206220006126.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="类的生命周期"></p>
-<h3 id="Java程序对类的使用方式分为两种"><a href="#Java程序对类的使用方式分为两种" class="headerlink" title="Java程序对类的使用方式分为两种"></a>Java程序对类的使用方式分为两种</h3><ul>
+<li>加载<br><img src="https://img-blog.csdnimg.cn/20200206220006126.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="类的生命周期"><h3 id="Java程序对类的使用方式分为两种"><a href="#Java程序对类的使用方式分为两种" class="headerlink" title="Java程序对类的使用方式分为两种"></a>Java程序对类的使用方式分为两种</h3></li>
 <li>主动使用(7种)</li>
 </ul>
 <blockquote>
 <p>所有的Java虚拟机实现必须在每个类或者接口被Java程序”首次主动使用”时才初始化他们</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 创建类的实例</span><br><span class="line">2. 访问某个类或者接口的静态变量，或者对该静态变量赋值</span><br><span class="line">3. 调用类的静态方法</span><br><span class="line">4. 反射（如Class.forName(&quot;com.test.Test&quot;)）</span><br><span class="line">5. 初始化一个类的子类</span><br><span class="line">6. Java虚拟机启动时被标明为启动类的类(Java Test)</span><br><span class="line">7. JDK1.7开始提供的动态语言支持  java.lang.invoke.MethodHandle 实例的解析结果REF_getStatic,REF_putStatic,REF_invokeStatic句柄对应的类没有初始化,则初始化</span><br></pre></td></tr></table></figure>
-
+<ol>
+<li><p>创建类的实例</p>
+</li>
+<li><p>访问某个类或者接口的静态变量，或者对该静态变量赋值</p>
+</li>
+<li><p>调用类的静态方法</p>
+</li>
+<li><p>反射（如Class.forName(“com.test.Test”)）</p>
+</li>
+<li><p>初始化一个类的子类</p>
+</li>
+<li><p>Java虚拟机启动时被标明为启动类的类(Java Test)</p>
+</li>
+<li><p>JDK1.7开始提供的动态语言支持  java.lang.invoke.MethodHandle 实例的解析结果REF_getStatic,REF_putStatic,REF_invokeStatic句柄对应的类没有初始化,则初始化</p>
 <ul>
 <li><p>被动使用</p>
-<p> 除了以上主动使用七种，其余都是被动使用</p>
+<p>除了以上主动使用七种，其余都是被动使用</p>
 </li>
 </ul>
+</li>
+</ol>
 <p><strong>对于静态字段来说，只有直接定义了该字段的类才会被初始化<br>当一个类在初始化时，要求其父类全部都已经初始化完毕了</strong></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTest1</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(Mychild1.str);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyParent1</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String str1 = <span class="string">"welcome"</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"MyParent1"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Mychild1</span> <span class="keyword">extends</span> <span class="title">MyParent1</span></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String str = <span class="string">"hello"</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">"Mychild1"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
