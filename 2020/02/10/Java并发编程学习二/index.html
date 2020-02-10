@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Java并发编程学习二 - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code,sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#内存模型"><span class="toc-text">内存模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Happens-before规则"><span class="toc-text">Happens-before规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#synchronized关键字的实现和使用"><span class="toc-text">synchronized关键字的实现和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized方法"><span class="toc-text">synchronized方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized与ReentrantLock"><span class="toc-text">synchronized与ReentrantLock</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#volatile"><span class="toc-text">volatile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#synchronized和volatile区别"><span class="toc-text">synchronized和volatile区别</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程创建方式"><span class="toc-text">线程创建方式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#线程创建方式一"><span class="toc-text">线程创建方式一</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程创建方式二"><span class="toc-text">线程创建方式二</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#线程创建方式三"><span class="toc-text">线程创建方式三</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ThreaLocal"><span class="toc-text">ThreaLocal</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> sometimes code,sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Java并发编程学习二
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-10 16:30:00</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#java" title="java">java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#并发编程" title="并发编程">并发编程</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="内存模型"><a href="#内存模型" class="headerlink" title="内存模型"></a>内存模型</h1><p><img src="https://img-blog.csdnimg.cn/20200210162329787.png" alt="内存模型"></p>
+<ul>
+<li>L1和L2是每个CPU自己的高速缓存</li>
+<li>L3是多CPU之间共享的缓存</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200210162408661.png" alt="Java内存模型"></p>
+<ul>
+<li>每个线程有自己的工作内存</li>
+<li>工作内存包含线程本地局部变量和主内存的副本拷贝</li>
+<li>线程之间的共享变量通过主内存在各线程间同步</li>
+</ul>
+<h1 id="Happens-before规则"><a href="#Happens-before规则" class="headerlink" title="Happens-before规则"></a>Happens-before规则</h1><ul>
+<li>程序次序规则：在程序中若操作A先于操作B发生，那么线程中操作A也先于操作B发生</li>
+<li>对象终结规则：一个对象的构造函数的完成先于发生于其finalize()方法</li>
+<li>锁规则：对于同一个锁，加锁操作先行发生于解锁操作</li>
+<li>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则操作A先行发生于操作C</li>
+<li>volatile变量规则：对于一个volatile变量的写操作先行发生于对这个变量的读操作</li>
+<li>线程启动规则：Thread对象的start()方法先行发生于此线程中的每个指令操作</li>
+<li>线程中断规则：一个线程对另一个线程带interrupt()方法，先行发生于被中断线程检测到中断事件</li>
+<li>线程结束规则：线程中所有的操作都先于发生于线程的终止时，如线程结束、Thread.join()返回</li>
+</ul>
+<h1 id="synchronized关键字的实现和使用"><a href="#synchronized关键字的实现和使用" class="headerlink" title="synchronized关键字的实现和使用"></a>synchronized关键字的实现和使用</h1><p>是什么？<br>    是Java语言关键字，用来给方法或代码块加锁，控制方法或代码块同一时间只有一个线程执行，用来解决多个线程同时访问时出现的并发问题。</p>
+<h2 id="synchronized方法"><a href="#synchronized方法" class="headerlink" title="synchronized方法"></a>synchronized方法</h2><ul>
+<li>方法使用ACC_SYNCHRONIZED标识</li>
+<li>如果是static方法，锁是作用在类上</li>
+<li>如果是非static方法，锁是作用在具体的类对象上synchronized代码块</li>
+<li>使用monitorenter和monitorexit指令线程进出</li>
+</ul>
+<h2 id="synchronized与ReentrantLock"><a href="#synchronized与ReentrantLock" class="headerlink" title="synchronized与ReentrantLock"></a>synchronized与ReentrantLock</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reentrant</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span>(LOCK)&#123;</span><br><span class="line">        System.out.println(<span class="string">"hold Lock"</span>);</span><br><span class="line">        <span class="keyword">synchronized</span>(LOCK)&#123;</span><br><span class="line">            System.out.println(<span class="string">"hold Lock again"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">useReentantLock</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    ReentrantLock lock = <span class="keyword">new</span> ReentrantLock();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        lock.lock();</span><br><span class="line">        System.out.println(<span class="string">"hold lock"</span>);</span><br><span class="line">    &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">        lock.unlock();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p><strong>相同点</strong></p>
+<ul>
+<li>都是用于多线程中对资源加锁，控制代码同一时间只有单个线程在执行</li>
+<li>当一个线程获取了锁，其他线程均需要阻塞等待</li>
+<li>均为可重入锁</li>
+</ul>
+<p> <strong>不同点</strong></p>
+<ul>
+<li><p>synchronized是Java语言的关键字，由虚拟机字节码指令实现；<br>ReentrantLock是Java sdk提供的API级别锁实现</p>
+</li>
+<li><p>synchronized可以在方法级别锁</p>
+</li>
+<li><p>ReentrantLock可以通过tryLock等待指定时间的锁，超时返回，synchronized不行</p>
+</li>
+<li><p>ReentrantLock提供了公平锁和非公平锁实现，synchronized只有非公平锁</p>
+</li>
+</ul>
+<h2 id="volatile"><a href="#volatile" class="headerlink" title="volatile"></a>volatile</h2><ol>
+<li>用来保证多线程间对变量的内存可见性，将最新变量值及时通知给其他线程</li>
+<li>禁止volatile前后的指令进行重排序</li>
+<li>不保证线程安全，不可用于数字的线程安全递增</li>
+</ol>
+<p><strong>应用场景</strong></p>
+<ol>
+<li>修饰状态变量</li>
+</ol>
+<blockquote>
+<p>用于线程间访问该变量，保证各线程可以看到最新的内存值</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">volatileSty</span> </span>&#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> isFinish = <span class="keyword">false</span>;</span><br><span class="line">            </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">finish</span><span class="params">()</span></span>&#123;</span><br><span class="line">        isFinish = <span class="keyword">true</span>;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">work</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(!isFinish)&#123;</span><br><span class="line">            System.out.println(<span class="string">"working"</span>);;</span><br><span class="line">        &#125;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>单实例对象构造</li>
+</ol>
+<blockquote>
+<p>避免多线程情况下由于内存不可见而重复多次构造对象</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BuildSingleObject</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> BuildSingleObject object;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">BuildSingleObject</span><span class="params">()</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> BuildSingleObject <span class="title">buildSingleObject</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(object == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (BuildSingleObject<span class="class">.<span class="keyword">class</span>)</span>&#123;</span><br><span class="line">                <span class="keyword">if</span>(object == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    object = <span class="keyword">new</span> BuildSingleObject();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">       <span class="keyword">return</span> object; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="synchronized和volatile区别"><a href="#synchronized和volatile区别" class="headerlink" title="synchronized和volatile区别"></a>synchronized和volatile区别</h2><ul>
+<li>synchronized是用于同步锁控制，具有原子性，控制同一时间只有一个线程执行一个代码或代码块</li>
+<li>volatile只保证线程间的内存可见性，不具备锁的特性，无法保证修饰对象的原子性</li>
+</ul>
+<h1 id="线程创建方式"><a href="#线程创建方式" class="headerlink" title="线程创建方式"></a>线程创建方式</h1><h2 id="线程创建方式一"><a href="#线程创建方式一" class="headerlink" title="线程创建方式一"></a>线程创建方式一</h2><p>通过Runnable接口创建线程</p>
+<ol>
+<li>重写Runnable的run方法</li>
+<li>使用runnable对象构造Thread对象</li>
+<li>启动线程</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Runnable runnable = <span class="keyword">new</span> Runnable()&#123;</span><br><span class="line"></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"Thread running"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    </span><br><span class="line">    Thread thread = <span class="keyword">new</span> Thread(runnable);</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="线程创建方式二"><a href="#线程创建方式二" class="headerlink" title="线程创建方式二"></a>线程创建方式二</h2><p>继承Thread类创建线程</p>
+<ol>
+<li>继承Thread类，重写run方法</li>
+<li>构造这个Thread子类</li>
+<li>调用start()方法启动线程</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    Thread thread = <span class="keyword">new</span> MyThread();</span><br><span class="line">    thread.start();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"Thread running"</span>);;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="线程创建方式三"><a href="#线程创建方式三" class="headerlink" title="线程创建方式三"></a>线程创建方式三</h2><p>使用Callable和FutureTask创建线程</p>
+<ol>
+<li>实现Callable接口，重写call方法</li>
+<li>传入Callable对象，构造FutureTask(Runnable的子类)对象</li>
+<li>传入FutureTask对象构造Thread对象，启动线程</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException </span>&#123;</span><br><span class="line">    Callable&lt;String&gt; callable = <span class="keyword">new</span> MyCallable();</span><br><span class="line"></span><br><span class="line">    Future&lt;String&gt; futureTask = <span class="keyword">new</span> FutureTask(callable);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">new</span> Thread((Runnable) futureTask).start();</span><br><span class="line"></span><br><span class="line">    String result = futureTask.get();</span><br><span class="line">    System.out.println(<span class="string">"result = "</span>+ result);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyCallable</span> <span class="keyword">implements</span>  <span class="title">Callable</span>&lt;<span class="title">String</span>&gt;</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"calling"</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"calling"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="ThreaLocal"><a href="#ThreaLocal" class="headerlink" title="ThreaLocal"></a>ThreaLocal</h1><p>ThreadLocal 是 JDK底层提供的一个解决多线程并发问题的工具类,它为每个线程提供了一个本地的副本变量机制，实现了和其它线程隔离，并且这种变量只在本线程的生命周期内起作用，可以减少同一个线程内多个方法之间的公共变量传递的复杂度。<br>举一个比较形象的例子(自己想的,说的不好请多多指正):中学时期,我们经常会有这样一个场景:老师把布置的作业写到黑板上,没有 ThreadLocal 这种机制的话是这样的,有一个很大的作业本,每个学生把自己的作业都写到这一个笔记本上面属于自己的那一块区域上。而我们也知道,实际的场景是每个同学都有一个自己的作业本,把各自的作业抄写到自己的作业本上面，就实现了和其它同学的作业隔离,感觉这个比较像 ThreadLocal 的工作原理。</p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/dawn-90-70">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/TanDawn1">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="#">友情链接</a></span>
+        <span>/</span>
+        
+        <span><a href="https://tmb115115.github.io" target="_blank" rel="noopener">Ycdi&#39;s</a></span>
+        <span>/</span>
+        
+        <span><a href="https://jiesunn.github.io" target="_blank" rel="noopener">JieSunn</a></span>
+        <span>/</span>
+        
+        <span><a href="https://me.csdn.net/weixin_43871956" target="_blank" rel="noopener">CSDN</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
