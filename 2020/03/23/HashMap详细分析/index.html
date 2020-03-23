@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        HashMap详细分析 - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code,sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> sometimes code,sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        HashMap详细分析
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-03-23 11:58:00</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#java" title="java">java</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>参考：<br><a href="https://blog.csdn.net/swpu_ocean/article/details/88917958" target="_blank" rel="noopener">https://blog.csdn.net/swpu_ocean/article/details/88917958</a><br>    <a href="https://www.bilibili.com/read/cv5227300" target="_blank" rel="noopener">https://www.bilibili.com/read/cv5227300</a></p>
+</blockquote>
+<p>只要是对于集合有一定了解的一定都知道HashMap是线程不安全的，我们应该使用 ConcurrentHashMap。但是为什么HashMap是线程不安全的呢？为什么不用Hashtable呢？咱从头开始分析</p>
+<blockquote>
+<p>首先我们分析一下hashMap的实现原理及数据结构<br>明确一点:<br>JDK1.7的时候使用的是 <strong>数组+ 单链表</strong> 的数据结构。但是在JDK1.8及之后时，使用的是 <strong>数组+链表+红黑树</strong> 的数据结构（当链表的深度达到8的时候，也就是默认阈值，就会自动扩容把链表转成红黑树的数据结构来把时间复杂度从O（n）变成O（nlogN）提高了效率）</p>
+<p>这里主要以前者进行分析</p>
+</blockquote>
+<p>数据结构大概如下：数组里面每个地方都存了Key-Value这样的实例，Java7中叫Entry，Java8中叫Node<br><img src="https://img-blog.csdnimg.cn/20200323104813334.png" alt="在这里插入图片描述"><br>因为他本身所有的位置都为null，在put插入的时候会根据key的hash去计算一个index值。</p>
+<p>put(“帅丙”,520),插入”帅丙元素”，这个时候通过hash函数计算出插入的位置。计算出index=2如下<br><img src="https://img-blog.csdnimg.cn/20200323105116771.png" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>既然使用hash，那肯定得考虑hash碰撞，极端情况下hash到同一个值，怎么办呢？</p>
+</blockquote>
+<p>解决hash碰撞的方式有很多种，这里不赘述了<br>HashMap的解决方法很直接，使用链地址法（拉链法），将同一计算得到同一hash值的用链表串起来。<br><img src="https://img-blog.csdnimg.cn/2020032310562270.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<blockquote>
+<p>注意：链表插入Entry（Node）节点这一块，在JDK1.7和JDK1.8做了一次修改：<strong>将头插法改为尾插法</strong><br> 那么为什么呢？</p>
+</blockquote>
+<p>这就牵扯到HashMap的扩容机制了！<br>数组容量有限，数据达到一定数量就会扩容，即resize。<br>决定resize有两个因素：</p>
+<ul>
+<li>Capacity：HashMap当前长度</li>
+<li>LoadFactor：负载因子，默认值0.75f<br>当hashmap中的<strong>元素个数</strong> 超过 <strong>数组大小*loadFactor</strong> 时，就会进行数组扩容<br>假设当前的容量大小为100，当你存进76个的时候就会触发扩容！</li>
+</ul>
+<blockquote>
+<p>怎么扩容捏？</p>
+</blockquote>
+<p>两步：</p>
+<ul>
+<li>扩容：创建一个新的Entry空数组，长度是原数组的两倍</li>
+<li>ReHash：遍历Entry数组，把所有的Entry <strong>重新Hash</strong> 到新数组<blockquote>
+<p>那么问题来了：为什么是两倍（2的次幂）？为什么又要重新Hash？</p>
+</blockquote>
+</li>
+</ul>
+<p>为什么捏？：</p>
+<p>先看源码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br><span class="line">i = (n - <span class="number">1</span>) &amp; hash</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这里提一点  <code>(n - 1) &amp; hash = hash % n</code> &amp;的计算速度比%快</p>
+</blockquote>
+<p><strong>重新hash</strong></p>
+<p>从源码可以看出 <code>(n - 1) &amp; hash</code> 数据的存放位置index是由这个公式计算出来的！<br>扩容发生之后，hash的规则也随着改变！自然位置变了，要<strong>重新hash计算</strong></p>
+<p><strong>2次幂</strong></p>
+<p>这里<code>i = (n - 1) &amp; hash</code>就可以实现一个均匀分布<br>我们比如容量是n=32，那么32-1=31,31的二进制是<code>11111</code><br>(2^n)-1 正好二进制位全是1，类似这种<code>1111111</code>，这样与运算<code>hash</code>冲突才能降到到最低另外，HashMap的初始容量是2的n次幂，扩容也是2倍的形式进行扩容，是因为容量是2的n次幂，可以使得添加的元素均匀分布在HashMap中的数组上，减少hash碰撞，避免形成链表的结构，使得查询效率降低！</p>
+<blockquote>
+<p>继续看扩容</p>
+</blockquote>
+<p>假设容量大小为2的put两个值， 2<em>0.75 = 1.6<br>所以我们插入第二个值的时候就要<code>resize</code><br>*</em>假设 我们插入完数据成这样 还没开始扩容**<br>我们可以看到链表的指向A-&gt;B-&gt;C<br><img src="https://img-blog.csdnimg.cn/20200323113612230.png" alt="在这里插入图片描述"><br>开始resize（使用头插法），你会发现重新计算过索引位置之后，这些值有可能被放在不同的位置，就可能出现下面的情况</p>
+<blockquote>
+<p><strong>头插法：同一位置的新元素总会被放在链表的头部位置</strong><br>B -&gt; A<br><img src="https://img-blog.csdnimg.cn/20200323113859162.png" alt="在这里插入图片描述"><br><strong>一旦是在多线程情况下，几个线程都调度完成，就可能形成环形链表，死循环了！</strong><img src="https://img-blog.csdnimg.cn/20200323114017882.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</blockquote>
+<p><strong>然后JDK1.8就修改为尾插法，虽然解决了高并发情况下死循环的问题，但是数据覆盖的问题还是存在！</strong></p>
+<blockquote>
+<p>下面康康JDK1.8中的线程不安全</p>
+</blockquote>
+<p>如果你去阅读1.8的源码会发现找不到transfer函数，因为JDK1.8直接在resize函数中完成了数据迁移。</p>
+<blockquote>
+<p>为什么说JDK1.8会出现数据覆盖的情况喃，我们来看一下下面这段JDK1.8中的put操作代码：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="function"><span class="params">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">        Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">        <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">            n = (tab = resize()).length;</span><br><span class="line">        <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>) <span class="comment">// 如果没有hash碰撞则直接插入元素</span></span><br><span class="line">            tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            Node&lt;K,V&gt; e; K k;</span><br><span class="line">            <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">                ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                e = p;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">                    <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                        p.next = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">                        <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></span><br><span class="line">                            treeifyBin(tab, hash);</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                        ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    p = e;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">                V oldValue = e.value;</span><br><span class="line">                <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">                    e.value = value;</span><br><span class="line">                afterNodeAccess(e);</span><br><span class="line">                <span class="keyword">return</span> oldValue;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        ++modCount;</span><br><span class="line">        <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">            resize();</span><br><span class="line">        afterNodeInsertion(evict);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中第六行代码是判断是否出现hash碰撞，<strong>假设两个线程A、B都在进行put操作</strong>，并且hash函数计算出的插入下标是相同的，当线程A执行完第六行代码后由于时间片耗尽导致被挂起，而线程B得到时间片后在该下标处插入了元素，完成了正常的插入，然后线程A获得时间片，由于之前已经进行了hash碰撞的判断，所有此时不会再进行判断，而是直接进行插入，这就导致了线程B插入的数据被线程A覆盖了，从而线程不安全。</p>
+<p>除此之前，还有就是代码的第38行处有个<code>++size</code>，我们这样想，还是线程A、B，这两个线程同时进行put操作时，假设当前<code>HashMap</code>的<code>zise</code>大小为10，当线程A执行到第38行代码时，从主内存中获得<code>size</code>的值为10后准备进行<code>+1</code>操作，但是由于时间片耗尽只好让出CPU，线程B快乐的拿到CPU还是从主内存中拿到<code>size</code>的值10进行<code>+1</code>操作，完成了<code>put</code>操作并将<code>size=11</code>写回主内存，然后线程A再次拿到CPU并继续执行(此时size的值仍为10)，当执行完put操作后，还是将size=11写回内存，此时，线程A、B都执行了一次put操作，但是size的值只增加了1，所有说还是由于数据覆盖又导致了线程不安全。</p>
+<blockquote>
+<p><strong>总结</strong><br> <code>HashMap</code>的线程不安全主要体现在下面两个方面：<br>1.在JDK1.7中，当并发执行扩容操作时会造成环形链和数据丢失的情况。<br>2.在JDK1.8中，在并发执行put操作时会发生数据覆盖的情况。<br>那么问题又来了——我们为什么不用hashtable而更推荐用concurrentHashMap</p>
+</blockquote>
+<p>hashmap 与hashtable 很类似，主要区别是hashtable 有用<code>synchronized</code>进行线程同步，hashmap没有。<br>然而，建议少用hashtable,在单线程中，无需做线程控制，运行效率更高；在多线程中，synchronized会造成线程饥饿，死锁</p>
+<p><strong>属实鸡肋</strong></p>
+<blockquote>
+<p>ConcurrentHshMap请参考<br> <a href="https://www.jianshu.com/p/5dbaa6707017" target="_blank" rel="noopener">https://www.jianshu.com/p/5dbaa6707017</a></p>
+</blockquote>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/dawn-90-70">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/TanDawn1">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="#">友情链接</a></span>
+        <span>/</span>
+        
+        <span><a href="https://tmb115115.github.io" target="_blank" rel="noopener">Ycdi&#39;s</a></span>
+        <span>/</span>
+        
+        <span><a href="https://jiesunn.github.io" target="_blank" rel="noopener">JieSunn</a></span>
+        <span>/</span>
+        
+        <span><a href="https://me.csdn.net/weixin_43871956" target="_blank" rel="noopener">CSDN</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
