@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        SpringIOC理解 - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code,sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring中工厂结构图"><span class="toc-text">Spring中工厂结构图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringIoc理解："><span class="toc-text">SpringIoc理解：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-ApplicationContext的三个常用实现类："><span class="toc-text">1.ApplicationContext的三个常用实现类：</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-核心容器的两个接口引发出来的问题"><span class="toc-text">2.核心容器的两个接口引发出来的问题:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-Bean的装配与管理"><span class="toc-text">3.Bean的装配与管理:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#使用默认构造函数创建"><span class="toc-text">使用默认构造函数创建</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入-Spring容器）-如下"><span class="toc-text">使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入 Spring容器）,如下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器），如下："><span class="toc-text">使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器），如下：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-bean-的作用范围"><span class="toc-text">4.bean 的作用范围:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring框架中的单例Beans是线程安全的么？"><span class="toc-text">Spring框架中的单例Beans是线程安全的么？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-bean对象的生命周期"><span class="toc-text">5.bean对象的生命周期:</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#实例化Bean"><span class="toc-text">实例化Bean</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> sometimes code,sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        SpringIOC理解
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-01-31 20:31:24</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#java" title="java">java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#spring" title="spring">spring</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="Spring中工厂结构图"><a href="#Spring中工厂结构图" class="headerlink" title="Spring中工厂结构图"></a>Spring中工厂结构图</h1><p><img src="https://img-blog.csdnimg.cn/20200131202705712.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="SpringIoc理解："><a href="#SpringIoc理解：" class="headerlink" title="SpringIoc理解："></a>SpringIoc理解：</h1><p>IOC就是控制反转，是指创建对象的控制权的转移，以前创建对象的主动权和时机是由自己把控的，而现在这种权力转移到Spring容器中，并由容器根据配置文件去创建实例和管理各个实例之间的依赖关系，对象与对象之间松散耦合，也利于功能的复用。<br>DI依赖注入，和控制反转是同一个概念的不同角度的描述，即 应用程序在运行时依赖IOC容器来动态注入对象需要的外部资源。</p>
+<p>最直观的表达就是，IOC让对象的创建不用去new了，可以由spring自动生产，使用java的反射机制，根据配置文件在运行时动态的去创建对象以及管理对象，并调用对象的方法的。</p>
+<p>Spring的IOC有三种注入方式 ：构造器注入、setter方法注入、根据注解注入。</p>
+<p>IOC让相互协作的组件保持松散的耦合，而AOP编程允许你把遍布于应用各层的功能分离出来形成可重用的功能组件。</p>
+<h1 id="1-ApplicationContext的三个常用实现类："><a href="#1-ApplicationContext的三个常用实现类：" class="headerlink" title="1.ApplicationContext的三个常用实现类："></a>1.ApplicationContext的三个常用实现类：</h1><p><strong>ClassPathXmlApplicationContext</strong>： 它可以加载路径下的配置文件，要求配置文件必须在路径下，否则加载不了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ac = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"beans.xml"</span>);</span><br></pre></td></tr></table></figure>
+
+<p><strong>FileSyetemXmlApplicationContext</strong>：它可以加载磁盘下任意路径下的配置文件（必须有访问权限）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext ac = <span class="keyword">new</span> FileSystemXmlApplicationContext(<span class="string">"C:\\user\\greyson\\..."</span>)</span><br></pre></td></tr></table></figure>
+
+<p><strong>AnnotationConfigApplicationContext</strong>：它是用于读取注解创建容器的</p>
+<h1 id="2-核心容器的两个接口引发出来的问题"><a href="#2-核心容器的两个接口引发出来的问题" class="headerlink" title="2.核心容器的两个接口引发出来的问题:"></a>2.核心容器的两个接口引发出来的问题:</h1><p><strong>ApplicationContext</strong>：它在创建核心容器时，创建对象采取的策略是采用<strong>立即加载</strong>的方式，也就是说，只要一读取完配置文件就马上创建配置文件中配置的对象</p>
+<ul>
+<li><p>单例对象适用</p>
+</li>
+<li><p>开发中常采用此接口</p>
+<p>这样，在容器启动时，我们就可以发现Spring中存在的配置错误，这样有利于检查所依赖属性是否注入。 ApplicationContext启动后预载入所有的单实例Bean，通过预载入单实例bean ,确保当你需要的时候，你就不用等待，因为它们已经创建好了。<br><strong>BeanFactory</strong>: 它在构建核心容器时，创建对象的策略是采用延迟加载的方式，什么时候获取 id 对象了，什么时候就创建对象。</p>
+</li>
+<li><p>多例对象适用</p>
+</li>
+</ul>
+<p>BeanFactory是Spring里面<strong>最底层的接口</strong>，包含了各种Bean的定义，读取bean配置文档，管理bean的加载、实例化，控制bean的生命周期，维护bean之间的依赖关系。ApplicationContext接口作为BeanFactory的派生，除了提供BeanFactory所具有的功能外，还提供了更完整的框架功能：</p>
+<ul>
+<li>继承MessageSource，因此支持国际化。</li>
+<li>统一的资源文件访问方式。</li>
+<li>提供在监听器中注册bean的事件。</li>
+<li>同时加载多个配置文件。</li>
+<li>载入多个（有继承关系）上下文 ，使得每一个上下文都专注于一个特定的层次，比如应用的web层。</li>
+</ul>
+<blockquote>
+<p>相对于基本的BeanFactory，ApplicationContext<br>唯一的不足是占用内存空间。当应用程序配置Bean较多时，程序启动较慢。</p>
+</blockquote>
+<h1 id="3-Bean的装配与管理"><a href="#3-Bean的装配与管理" class="headerlink" title="3.Bean的装配与管理:"></a>3.Bean的装配与管理:</h1><p>三种创建 bean 对象的方式</p>
+<h2 id="使用默认构造函数创建"><a href="#使用默认构造函数创建" class="headerlink" title="使用默认构造函数创建"></a>使用默认构造函数创建</h2><p>在spring的配置文件中，使用 id 和 class 属性之后，且没有其他属性和标签时，采用的就是默认构造函数创建 bean 对象，此时如果类中没有默认构造函数，则对象无法创建。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id = "accountService" class = "com.itheima.service.impl.AccountServiceImpl"&gt;&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入-Spring容器）-如下"><a href="#使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入-Spring容器）-如下" class="headerlink" title="使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入 Spring容器）,如下"></a>使用普通工厂中的方法创建对象（使用某个类中的方法创建对象，并存入 Spring容器）,如下</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> *模拟一个工厂类，该类可能存在于jar包中，无法通过修改源码的方式来提供默认构造函数</span></span><br><span class="line"><span class="comment"> * </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InstanceFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> IAccountService <span class="title">getAccountService</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AccountServiceImpl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>配置方式如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id = "instanceFactory" class = "com.itheima.factory.InstanceFactory"&gt;&lt;/bean&gt;</span><br><span class="line">&lt;bean id = "accountService" factory-bean="instanceFactory" factory-method="getAccountService"&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器），如下："><a href="#使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器），如下：" class="headerlink" title="使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器），如下："></a>使用工厂中的静态方法创建对象（使用某个类中的静态方法创建对象，并存入spring容器），如下：</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StaticFactory</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">static</span> IAccountService <span class="title">getAccountService</span><span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> AccountServiceImpl();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-bean-的作用范围"><a href="#4-bean-的作用范围" class="headerlink" title="4.bean 的作用范围:"></a>4.bean 的作用范围:</h1><p><strong>bean 标签的 scope 属性</strong><br>作用：用于指定 bean 的作用范围<br>取值：常用的就是<strong>单例和多例</strong></p>
+<ul>
+<li>singletond : 单例的（default）每个容器中只有一个bean的实例，单例的模式由BeanFactory自身来维护。</li>
+<li>prototype : 多例的 为每一个bean请求提供一个实例。</li>
+<li>request : 作用于 web 应用的请求范围 为每一个网络请求创建一个实例,bean会失效并被垃圾回收器回收。</li>
+<li>session : 与request范围类似，确保每个session中有一个bean的实例，在session过期后，bean会随之失效。</li>
+<li>global-session : 作用于集群的会话范围（全局会话范围），当不是集群范围时，它就是 session</li>
+</ul>
+<h2 id="Spring框架中的单例Beans是线程安全的么？"><a href="#Spring框架中的单例Beans是线程安全的么？" class="headerlink" title="Spring框架中的单例Beans是线程安全的么？"></a>Spring框架中的单例Beans是线程安全的么？</h2><p>Spring框架并没有对单例bean进行任何多线程的封装处理。关于单例bean的线程安全和并发问题需要开发者自行去搞定。但实际上，大部分的Spring bean并没有可变的状态(比如Serview类和DAO类)，<strong>所以在某种程度上说Spring的单例bean是线程安全的。</strong>如果你的bean有多种状态的话（比如 View Model 对象），就需要自行保证线程安全。最浅显的解决办法就是将多态bean的作用域由“singleton”变更为“prototype”。</p>
+<h1 id="5-bean对象的生命周期"><a href="#5-bean对象的生命周期" class="headerlink" title="5.bean对象的生命周期:"></a>5.bean对象的生命周期:</h1><p>Servlet的生命周期：实例化，初始init，接收请求service，销毁destroy；<br>Spring上下文中Bean生命周期也类似:<br><strong>单例对象：</strong></p>
+<ul>
+<li>出生：当容器创建时发生</li>
+<li>活着：只要容器还在对象就一直活着</li>
+<li>死亡：容器销毁，对象消亡</li>
+</ul>
+<p> <strong>总结：单例对象的声明周期和容器相同</strong></p>
+<p>多例对象：</p>
+<ul>
+<li>出生：当我们使用对象时 Spring 框架为我们创建</li>
+<li>活着：对象只要是在使用过程中就活着</li>
+<li><strong>死亡：当对象长时间不用，且没有别的对象引用时，由 Java 的GC回收</strong></li>
+</ul>
+<h2 id="实例化Bean"><a href="#实例化Bean" class="headerlink" title="实例化Bean"></a>实例化Bean</h2><p>对于BeanFactory容器，当客户向容器请求一个尚未初始化的bean时，或初始化bean的时候需要注入另一个尚未初始化的依赖时，容器就会调用createBean进行实例化。对于ApplicationContext容器，当容器启动结束后，通过获取BeanDefinition对象中的信息，实例化所有的bean。</p>
+<ul>
+<li><strong>设置对象属性（依赖注入）</strong></li>
+</ul>
+<p>实例化后的对象被封装在BeanWrapper对象中，紧接着，Spring根据BeanDefinition中的信息 以及 通过BeanWrapper提供的设置属性的接口完成依赖注入。</p>
+<ul>
+<li><strong>处理Aware接口</strong></li>
+</ul>
+<p>接着，Spring会检测该对象是否实现了xxxAware接口，并将相关的xxxAware实例注入给Bean；</p>
+<p><strong>如果这个Bean已经实现了BeanNameAware接口</strong>，会调用它实现的setBeanName(String beanId)方法，此处传递的就是Spring配置文件中Bean的id值；</p>
+<p><strong>如果这个Bean已经实现了BeanFactoryAware接口</strong>，会调用它实现的setBeanFactory()方法，传递的是Spring工厂自身。</p>
+<p><strong>如果这个Bean已经实现了ApplicationContextAware接口</strong>会调用setApplicationContext(ApplicationContext)方法，传入Spring上下文。</p>
+<ul>
+<li><strong>BeanPostProcessor</strong></li>
+</ul>
+<p>如果想对Bean进行一些自定义的处理，那么可以让Bean实现了BeanPostProcessor接口，那将会调用postProcessBeforeInitialization(Object obj, String s)方法。</p>
+<ul>
+<li><strong>InitializingBean 与 init-method：</strong></li>
+</ul>
+<p>如果Bean在Spring配置文件中配置了 init-method 属性，则会自动调用其配置的初始化方法。</p>
+<ul>
+<li><strong>如果这个Bean实现了BeanPostProcessor接口</strong></li>
+</ul>
+<p>将会调用postProcessAfterInitialization(Object obj, String s)方法；由于这个方法是在Bean初始化结束时调用的，所以可以被应用于内存或缓存技术；</p>
+<p><strong>以上几个步骤完成后，Bean就已经被正确创建了，之后就可以使用这个Bean了。</strong></p>
+<ul>
+<li><strong>DisposableBean</strong></li>
+</ul>
+<p>当Bean不再需要时，会经过清理阶段，如果Bean实现了DisposableBean这个接口，会调用其实现的destroy()方法；</p>
+<ul>
+<li><strong>destroy-method</strong></li>
+</ul>
+<p>最后，如果这个Bean的Spring配置中配置了destroy-method属性，会自动调用其配置的销毁方法。<br><img src="https://img-blog.csdnimg.cn/20200131201114634.png" alt="在这里插入图片描述"></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/dawn-90-70">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/TanDawn1">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="#">友情链接</a></span>
+        <span>/</span>
+        
+        <span><a href="https://tmb115115.github.io" target="_blank" rel="noopener">Ycdi&#39;s</a></span>
+        <span>/</span>
+        
+        <span><a href="https://jiesunn.github.io" target="_blank" rel="noopener">JieSunn</a></span>
+        <span>/</span>
+        
+        <span><a href="https://me.csdn.net/weixin_43871956" target="_blank" rel="noopener">CSDN</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

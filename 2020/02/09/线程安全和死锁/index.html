@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        线程安全和死锁 - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code,sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#线程安全"><span class="toc-text">线程安全</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#同步异步"><span class="toc-text">同步异步</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#阻塞非阻塞"><span class="toc-text">阻塞非阻塞</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程的并发和并行"><span class="toc-text">线程的并发和并行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#线程方法"><span class="toc-text">线程方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#死锁"><span class="toc-text">死锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#避免和处理死锁问题"><span class="toc-text">避免和处理死锁问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#定位死锁问题"><span class="toc-text">定位死锁问题</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> sometimes code,sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        线程安全和死锁
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-02-09 21:51:00</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#java" title="java">java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#并发编程" title="并发编程">并发编程</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><p>一个类被多个线程以任意方式同时调用，且不需要外部额外同步和协同的情况下，任然保持内部数据正确且表现正确的行为，那么这个类就是线程安全的。</p>
+<p>不可变的对象一定是线程安全的<br>举例：</p>
+<ol>
+<li>final修饰的不可变类，如String，Integer等</li>
+<li>enum枚举类<br>final修饰的类和属性一定线程安全？</li>
+<li>当你创建一个对象时，使用final关键字能够使得另一个线程不会访问到处于“部分创建”的对象，否则是会可能发生的。</li>
+<li>final只是用来保证值是不能被直接覆盖的。</li>
+</ol>
+<h1 id="同步异步"><a href="#同步异步" class="headerlink" title="同步异步"></a>同步异步</h1><p>同步概念：阻塞式调用，调用方法必须等待响应方执行完毕才会返回<br><img src="https://img-blog.csdnimg.cn/20200209214819104.png" alt="在这里插入图片描述"><br>异步概念：非阻塞式调用，立即返回，调用方无需等待响应方返回实际结果，响应方会通过状态、通知或回调来告知调用方<br><img src="https://img-blog.csdnimg.cn/2020020921482487.png" alt="在这里插入图片描述"></p>
+<h1 id="阻塞非阻塞"><a href="#阻塞非阻塞" class="headerlink" title="阻塞非阻塞"></a>阻塞非阻塞</h1><p>阻塞：调用结果返回之前，当前线程会被挂起，调用线程只有在得到结果之后才会返回</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> port = <span class="number">8080</span>;</span><br><span class="line">ServerSocket server = <span class="keyword">new</span> ServerSocket(port);</span><br><span class="line">Socket socket = server.accept();</span><br></pre></td></tr></table></figure>
+
+<p>非阻塞：指在不能立即得到结果之前，该调用不会阻塞当前线程，而会立即返回。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Socket socket = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>,<span class="number">8080</span>);</span><br><span class="line">BufferedWriter bufferedWriter = <span class="keyword">new</span> BufferedWriter(</span><br><span class="line">                                <span class="keyword">new</span> OutputStreamWriter(socket.getOutputStream()));</span><br><span class="line">String str = <span class="string">"hello"</span>;</span><br><span class="line">bufferedWriter.write(str);</span><br></pre></td></tr></table></figure>
+
+<h1 id="线程的并发和并行"><a href="#线程的并发和并行" class="headerlink" title="线程的并发和并行"></a>线程的并发和并行</h1><p>并发：逻辑上的同时处理。能处理多个事件，但是并不一定是同时进行的。<br>由系统的调度，让不同的线程在不同的小时的时间段内执行各自的线程任务逻辑。<br><img src="https://img-blog.csdnimg.cn/20200209214835280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>并行：物理或是实际的同时处理。能在同一时刻处理多个事件。<br><img src="https://img-blog.csdnimg.cn/20200209214842769.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="线程方法"><a href="#线程方法" class="headerlink" title="线程方法"></a>线程方法</h1><p><strong>Thread.yield()</strong><br>线程让步，使用了这个方法，当前线程就会退出CPU时间片，让其他线程或当前线程使用CPU时间片执行<br><strong>Thread.sleep()</strong><br>线程休眠，主动让出当前CPU时间，在指定时间过后，CPU会返回继续执行该线程。sleep方法不会释放当前所持有的锁<br><strong>Thread.join()</strong><br>等待该线程死亡/终止，当前线程会等待调用该方法的线程执行完毕后才能继续执行<br><strong>Object.wait()</strong><br>Object类的方法，调用前必须拥有对象锁，例如Synchronized代码块内，调用wait方法后，对象锁会释放，线程进入WAITING等待状态</p>
+<h1 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h1><blockquote>
+<p><a href="https://tandawn1.github.io/2019/11/04/%E7%BA%BF%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E7%B1%BB/" target="_blank" rel="noopener">https://tandawn1.github.io/2019/11/04/%E7%BA%BF%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E7%B1%BB/</a></p>
+</blockquote>
+<p>死锁的原因：两个及以上的线程，抢占2把及以上的锁，抢占锁的顺序不一致</p>
+<h2 id="避免和处理死锁问题"><a href="#避免和处理死锁问题" class="headerlink" title="避免和处理死锁问题"></a>避免和处理死锁问题</h2><ol>
+<li>不使用锁，不使用2把及以上的锁</li>
+<li>必须使用2把及以上的锁的时候，确保在整个应用程序中获取锁的顺序是一直到。</li>
+<li>尝试获取具有超时释放的锁，例如Lock中的tryLock来获取锁</li>
+<li>当发生了jave-level的锁时，重启程序来干掉进程/线程</li>
+</ol>
+<h2 id="定位死锁问题"><a href="#定位死锁问题" class="headerlink" title="定位死锁问题"></a>定位死锁问题</h2><p>命令 jps：列举正在运行的JAVA虚拟机进程并显示虚拟机执行的主类以及这些进程的唯一ID(PID)<br>命令jstack：用于JVM当前时刻的线程快照，得到JVM当前每一条线程正在执行的堆栈信息，定位线程长时间卡顿问题，如死锁、死循环等问题</p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/dawn-90-70">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/TanDawn1">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="#">友情链接</a></span>
+        <span>/</span>
+        
+        <span><a href="https://tmb115115.github.io" target="_blank" rel="noopener">Ycdi&#39;s</a></span>
+        <span>/</span>
+        
+        <span><a href="https://jiesunn.github.io" target="_blank" rel="noopener">JieSunn</a></span>
+        <span>/</span>
+        
+        <span><a href="https://me.csdn.net/weixin_43871956" target="_blank" rel="noopener">CSDN</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>

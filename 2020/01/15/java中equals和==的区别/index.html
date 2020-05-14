@@ -11,7 +11,7 @@
 
     <title>
         
-        TanDawn的博客 | TanDawn&#39;s Blog
+        Java中equals和==的区别 - TanDawn的博客 | TanDawn&#39;s Blog
         
     </title>
 
@@ -53,7 +53,7 @@
     </div>
     <div class="contents" id="nav-content">
         <ul>
-            <li  class=active >
+            <li >
                 <a href="/">
                     <i class="iconfont icon-shouye1"></i>
                     <span>主页</span>
@@ -81,6 +81,10 @@
         </ul>
     </div>
     
+        <div id="toc" class="toc-article">
+    
+</div>
+    
 </div>
 
 
@@ -105,186 +109,53 @@
     <div class="index-middle">
         <!-- Main Content -->
         
-<div class="post-preview-container" style="min-height: 720px">
-    
-    <div class="post-preview">
-        <div class="post-time">2020-01-13</div>
-        <div class="post-info">
-            <a href="/2020/01/13/深入理解MapReduce原理/">
-                <h3>
-                    深入理解MapReduce原理
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#大数据" title="大数据">大数据</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
+
+
+<div class="post-container">
+    <div class="post-title">
+        Java中equals和==的区别
     </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-12-06</div>
-        <div class="post-info">
-            <a href="/2019/12/06/java多态的理解/">
-                <h3>
-                    Java多态的理解
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#java" title="java">java</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-01-15 10:47:31</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#java" title="java">java</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
     </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-04</div>
-        <div class="post-info">
-            <a href="/2019/11/04/线程-线程安全的类/">
-                <h3>
-                    多线程-线程安全的类、死锁
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#java" title="java">java</a>
-                <span>/</span>
-                
-                
-            </p>
+    <div class="post-content no-indent">
+        <blockquote>
+<p>在用Mapreduce进行数据清洗过程中产生的困惑，用==判断数组中的值是否符合要求。忽略了在java中数组也是个对象 不能直接用==来判断</p>
+</blockquote>
+<p><strong>一、对象类型不同</strong><br>1、equals()：是超类Object中的方法;<br>2、==：是操作符.</p>
+<p><strong>二、比较的对象不同</strong><br>1、equals()：用来检测两个对象是否相等，即两个对象的内容是否相等;<br>2、==：用于比较引用和比较基本数据类型时具有不同的功能.</p>
+<p><strong>三、运行速度不同</strong><br>1、equals()：没有 = = 运行速度快。<br>2、= =：运行速度比equals()快，因为==只是比较引用。</p>
+<p><strong>equals()和==的源码定义：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>比较数组是否相等用equals</strong><br>数组相等的条件不仅要求数组元素的个数必须相等，而且要求对应位置的元素也相等。Arrays 类提供了 equals() 方法比较整个数组。</p>
+<p><strong>equals</strong>比较的是两个字符串内容是否相等<br><strong>==</strong>比较的是两个字符串的内存地址是否相同。<br>所以以后比较两个字符串内容是否相等要用equals();<br>==号在比较基本数据类型时比较的是值，<br>而用= =号比较两个对象时比较的是两个对象的地址值.</p>
+<blockquote>
+<p>举个通俗的例子来说，==是判断两个人是不是住在同一个地址，而equals是判断同一个地址里住的人是不是同一个</p>
+</blockquote>
+
+        
+        <br />
+        <div id="comment-container">
         </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-04</div>
-        <div class="post-info">
-            <a href="/2019/11/04/java中的全局变量、局部变量与static/">
-                <h3>
-                    Java中的全局变量、局部变量与static
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#java" title="java">java</a>
-                <span>/</span>
-                
-                
-            </p>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
         </div>
+
     </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-03</div>
-        <div class="post-info">
-            <a href="/2019/11/03/HDFS分布式文件系统/">
-                <h3>
-                    HDFS分布式文件系统
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#java" title="java">java</a>
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#大数据" title="大数据">大数据</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-03</div>
-        <div class="post-info">
-            <a href="/2019/11/03/Java实现二叉树/">
-                <h3>
-                    Java实现二叉树
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#java" title="java">java</a>
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#数据结构" title="数据结构">数据结构</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-02</div>
-        <div class="post-info">
-            <a href="/2019/11/02/Java集合List的实现原理/">
-                <h3>
-                    Java集合List的实现原理
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#java" title="java">java</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
-    </div>
-    
-    <div class="post-preview">
-        <div class="post-time">2019-11-02</div>
-        <div class="post-info">
-            <a href="/2019/11/02/Centos上安装Hadoop集群/">
-                <h3>
-                    Centos上安装Hadoop集群
-                </h3>
-            </a>
-            <p>
-                
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#Linux" title="Linux">Linux</a>
-                <span>/</span>
-                
-                <a class="tag" href="/tags/#大数据" title="大数据">大数据</a>
-                <span>/</span>
-                
-                
-            </p>
-        </div>
-    </div>
-    
 </div>
-<ul class="pager">
-    
-    <li class="previous">
-        <a href="/page/2/">&larr; Newer Posts</a>
-    </li>
-    
-    
-</ul>
 
     </div>
 </div>
@@ -357,7 +228,7 @@
     // We expose some of the variables needed by the front end
     window.hexo_search_path = ""
     window.hexo_root = "/"
-    window.isPost = false
+    window.isPost = true
 </script>
 <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 <script src="/js/index.js"></script>

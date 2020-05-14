@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword"  content="">
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        Spring体系概念 - TanDawn的博客 | TanDawn&#39;s Blog
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> sometimes code,sometimes design </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar radius">
+            <img src="/img/avatar.jpg" />
+        </div>
+        <div class="name">
+            <i>TanDawn</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li >
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>主页</span>
+                </a>
+            </li>
+            <li >
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>标签</span>
+                </a>
+            </li>
+            <li >
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>存档</span>
+                </a>
+            </li>
+            <li >
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Spring体系结构"><span class="toc-text">Spring体系结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#代码耦合-jdbc"><span class="toc-text">代码耦合(jdbc)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#解耦思路"><span class="toc-text">解耦思路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一、使用-Class-forName-com-mysql-jdbc-Driver-来注册驱动，即使用反射创建对象，避免使用new关键字"><span class="toc-text">一、使用 Class forName(com.mysql.jdbc.Driver) 来注册驱动，即使用反射创建对象，避免使用new关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二、通过读取配置文件来获取需要创建的对象全限定类名"><span class="toc-text">二、通过读取配置文件来获取需要创建的对象全限定类名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#工厂模式解耦"><span class="toc-text">工厂模式解耦</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单例，多例？"><span class="toc-text">单例，多例？</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringIOC"><span class="toc-text">SpringIOC</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#SpringAOP"><span class="toc-text">SpringAOP</span></a></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input"/>
+            <span id="begin-search">搜索</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+
+        <div class="index-about-mobile">
+            <i> sometimes code,sometimes design </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        Spring体系概念
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">发布于：<span>2020-01-30 11:19:53</span></span>
+        
+        <span class="attr">标签：/
+        
+        <a class="tag" href="/tags/#java" title="java">java</a>
+        <span>/</span>
+        
+        <a class="tag" href="/tags/#spring" title="spring">spring</a>
+        <span>/</span>
+        
+        
+        </span>
+        <span class="attr">访问：<span id="busuanzi_value_page_pv"></span>
+</span>
+</span>
+    </div>
+    <div class="post-content no-indent">
+        <h1 id="Spring体系结构"><a href="#Spring体系结构" class="headerlink" title="Spring体系结构"></a>Spring体系结构</h1><p><img src="https://img-blog.csdnimg.cn/20200130111706355.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="代码耦合-jdbc"><a href="#代码耦合-jdbc" class="headerlink" title="代码耦合(jdbc)"></a>代码耦合(jdbc)</h1><p>1.注册驱动<br>2.获取连接<br>3.获取操作数据库的预处理对象<br>4.执行SQL，得到结果集<br>5.遍历结果集<br>6.释放资源</p>
+<p><strong>实际开发中应做到：编译器不依赖，运行时才依赖</strong></p>
+<h2 id="解耦思路"><a href="#解耦思路" class="headerlink" title="解耦思路"></a>解耦思路</h2><h3 id="一、使用-Class-forName-com-mysql-jdbc-Driver-来注册驱动，即使用反射创建对象，避免使用new关键字"><a href="#一、使用-Class-forName-com-mysql-jdbc-Driver-来注册驱动，即使用反射创建对象，避免使用new关键字" class="headerlink" title="一、使用 Class forName(com.mysql.jdbc.Driver) 来注册驱动，即使用反射创建对象，避免使用new关键字"></a>一、使用 Class forName(com.mysql.jdbc.Driver) 来注册驱动，即使用反射创建对象，避免使用new关键字</h3><h3 id="二、通过读取配置文件来获取需要创建的对象全限定类名"><a href="#二、通过读取配置文件来获取需要创建的对象全限定类名" class="headerlink" title="二、通过读取配置文件来获取需要创建的对象全限定类名"></a>二、通过读取配置文件来获取需要创建的对象全限定类名</h3><h2 id="工厂模式解耦"><a href="#工厂模式解耦" class="headerlink" title="工厂模式解耦"></a>工厂模式解耦</h2><p>一个创建Bean对象的工厂<br>需要一个配置文件来配置servicedao<br>通过读取配置文件中配置的内容，反射创建对象<br>配置文件可以是xml也可以是properties</p>
+<h2 id="单例，多例？"><a href="#单例，多例？" class="headerlink" title="单例，多例？"></a>单例，多例？</h2><p><strong>单例：</strong> 所有请求用同一个对象来处理。通过单例模式，可以保证系统中一个类只有一个实例。<br><strong>多例：</strong> 每个请求用一个新的对象来处理。运行效率没有单例对象高，对象被创建多次</p>
+<blockquote>
+<p>实现简易springIOC代码：<a href="https://github.com/TanDawn1/SpringSty" target="_blank" rel="noopener">https://github.com/TanDawn1/SpringSty</a></p>
+</blockquote>
+<h1 id="SpringIOC"><a href="#SpringIOC" class="headerlink" title="SpringIOC"></a>SpringIOC</h1><p>控制反转 是面向对象编程中的一种设计原则，可以用来减低计算机代码之间的耦合度。其中最常见的方式叫做依赖注入（Dependency Injection，简称DI），还有一种方式叫“依赖查找”（Dependency Lookup）。通过控制反转，对象在被创建的时候，由一个调控系统内所有对象的外界实体将其所依赖的对象的引用传递给它。也可以说，依赖被注入到对象中。</p>
+<p>没有springIOC的时候<br><img src="https://img-blog.csdnimg.cn/20200130111903492.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>springIOC  断开了应用与资源的直接关系<br><img src="https://img-blog.csdnimg.cn/20200130111908403.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="SpringAOP"><a href="#SpringAOP" class="headerlink" title="SpringAOP"></a>SpringAOP</h1><p><strong>面相切面编程</strong><br>传统的OOP开发中，代码逻辑是自上而下的。在这些自上而下的过程中，会产生写横切性的问题。这个问题，由于我们主业务逻辑关系不大，会上落着代码的各个地方，难以维护。</p>
+<p>AOP的编程思想就是把这些横切性的问题和主业务逻辑进行分离。从而起到解藕的目的。</p>
+<p><strong>OOP自上而下的逻辑</strong><br><img src="https://img-blog.csdnimg.cn/20200130111920200.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+
+        
+        <br />
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+        <li>
+            <a target="_blank" href="https://www.zhihu.com/people/dawn-90-70">
+                            <span class="fa-stack fa-lg">
+                                 <i class="iconfont icon-zhihu"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+        
+
+        
+        <li>
+            <a target="_blank"  href="https://github.com/TanDawn1">
+                            <span class="fa-stack fa-lg">
+                                <i class="iconfont icon-github"></i>
+                            </span>
+            </a>
+        </li>
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span>/</span>
+        
+        <span><a href="#">友情链接</a></span>
+        <span>/</span>
+        
+        <span><a href="https://tmb115115.github.io" target="_blank" rel="noopener">Ycdi&#39;s</a></span>
+        <span>/</span>
+        
+        <span><a href="https://jiesunn.github.io" target="_blank" rel="noopener">JieSunn</a></span>
+        <span>/</span>
+        
+        <span><a href="https://me.csdn.net/weixin_43871956" target="_blank" rel="noopener">CSDN</a></span>
+        <span>/</span>
+        
+    </p>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud" target="_blank" rel="noopener">AirCloud</a></p>
+</footer>
+
+
+
+
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
