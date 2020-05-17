@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Redis," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="主从复制那些事儿">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis集群主从复制">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;17&#x2F;Redis%E9%9B%86%E7%BE%A4%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6&#x2F;index.html">
+<meta property="og:site_name" content="CodeGuN&#39;s Blog">
+<meta property="og:description" content="主从复制那些事儿">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200517230148958.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200517230157211.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200517230203475.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200517230547415.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2020-05-17T15:16:02.270Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200517230148958.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/17/Redis集群主从复制/"/>
+
+
+
+
+
+  <title>Redis集群主从复制 | CodeGuN's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	
+	<a href="https://your-url" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CodeGuN's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/Redis%E9%9B%86%E7%BE%A4%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CodeGuN">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/CodingGuN.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CodeGuN's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis集群主从复制</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-17T23:09:49+08:00">
+                2020-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center>
+ <i class="fa fa-quote-left"></i> 主从复制那些事儿  <i class="fa fa-quote-right"></i>
+ </center>
+ <a id="more"></a>
+
+<h1 id="主从复制概述"><a href="#主从复制概述" class="headerlink" title="主从复制概述"></a>主从复制概述</h1><hr>
+<p>主从复制，是指将一台Redis服务器的数据，复制到其他的Redis服务器。前者称为主节点(master)，后者称为从节点(slave)；<br>数据的复制是单向的，只能由主节点到从节点。默认情况下，每台Redis服务器都是主节点；</p>
+<p>且一个主节点可以有多个从节点(或没有从节点)，但一个从节点只能有一个主节点。</p>
+<h2 id="主从复制的作用"><a href="#主从复制的作用" class="headerlink" title="主从复制的作用"></a>主从复制的作用</h2><ul>
+<li>数据冗余：主从复制实现了数据的热备份，是持久化之外的一种数据冗余方式。</li>
+<li>故障恢复：当主节点出现问题时，可以由从节点提供服务，实现快速的故障恢复；</li>
+<li>负载均衡：在主从复制的基础上，配合读写分离，可以由主节点提供写服务，由从节点提供读服务（即写Redis数据时应用连接主节点，读Redis数据时应用连接从节点），分担服务器负载；尤其是在写少读多的场景下，通过多个从节点分担读负载，可以大大提高Redis服务器的并发量。</li>
+<li>高可用基石：除了上述作用以外，主从复制还是哨兵和集群能够实施的基础，因此说主从复制是Redis高可用的基础</li>
+</ul>
+<h1 id="如何使用主从复制"><a href="#如何使用主从复制" class="headerlink" title="如何使用主从复制"></a>如何使用主从复制</h1><hr>
+<p>先学会用，才好去理解原理嘛</p>
+<p><strong>建立复制</strong><br>主从复制的开启，完全是在从节点发起的；不需要我们在主节点做任何事</p>
+<h2 id="三种方式开启主从复制"><a href="#三种方式开启主从复制" class="headerlink" title="三种方式开启主从复制"></a>三种方式开启主从复制</h2><p>配置文件：在从服务器的配置文件中加入：<br><code>slaveof [masterip] [masterport]</code><br>启动命令：redis-server启动命令后加入 <code>–slaveof [masterip] [masterport]</code><br>客户端命令：Redis服务器启动后，直接通过客户端执行命令：<br><code>slaveof [masterip] [masterport]</code>，则该Redis实例成为从节点。</p>
+<ol>
+<li>从节点查询一个不存在的key：<br><img src="https://img-blog.csdnimg.cn/20200517230148958.png" alt="在这里插入图片描述"></li>
+<li>在主节点中增加这个key:<br><img src="https://img-blog.csdnimg.cn/20200517230157211.png" alt="在这里插入图片描述"></li>
+<li>此时在从节点中再次查询这个key，会发现主节点的操作已经同步至从节点：<br><img src="https://img-blog.csdnimg.cn/20200517230203475.png" alt="在这里插入图片描述"><br>删除亦然</li>
+</ol>
+<h1 id="主从复制的实现原理"><a href="#主从复制的实现原理" class="headerlink" title="主从复制的实现原理"></a>主从复制的实现原理</h1><hr>
+<p><strong>三个阶段：连接建立阶段（即准备阶段）、数据同步阶段、命令传播阶段</strong></p>
+<h2 id="连接建立阶段"><a href="#连接建立阶段" class="headerlink" title="连接建立阶段"></a>连接建立阶段</h2><blockquote>
+<p>主要作用是在主从节点之间建立连接，为数据同步做好准备。</p>
+</blockquote>
+<p><strong>步骤1： 从节点保存主节点信息</strong></p>
+<p>从节点服务器内部维护了两个字段，即masterhost和masterport字段，用于存储主节点的ip和port信息。<br>需要注意的是，slaveof是异步命令，从节点完成主节点ip和port的保存后，向发送slaveof命令的客户端直接返回OK，实际的复制操作在这之后才开始进行。</p>
+<p><strong>步骤2： 建立socket连接(学习过网络编程会很好理解)</strong></p>
+<p>从节点每秒1次调用复制定时函数replicationCron()，如果发现了有主节点可以连接，便会根据主节点的ip和port，创建socket连接。如果连接成功，则：<br>从节点：为该socket建立一个专门处理复制工作的文件事件处理器，负责后续的复制工作，如接收RDB文件、接收命令传播等。<br>主节点：接收到从节点的socket连接后（即accept之后），为该socket创建相应的客户端状态，并将从节点看做是连接到主节点的一个客户端，后面的步骤会以从节点向主节点发送命令请求的形式来进行。</p>
+<p><strong>步骤3：发送ping命令</strong></p>
+<p>从节点成为主节点的客户端之后，发送ping命令进行首次请求，目的是：检查socket连接是否可用，以及主节点当前是否能够处理请求。<br>从节点发送ping命令后，可能出现3种情况：</p>
+<ul>
+<li>返回pong：说明socket连接正常，且主节点当前可以处理请求，复制过程继续。</li>
+<li>超时：一定时间后从节点仍未收到主节点的回复，说明socket连接不可用，则从节点断开socket连接，并重连。</li>
+<li>返回pong以外的结果：如果主节点返回其他结果，如正在处理超时运行的脚本，说明主节点当前无法处理命令，则从节点断开socket连接，并重连。</li>
+</ul>
+<p><strong>步骤4：身份验证</strong></p>
+<p>如果从节点中设置了masterauth选项，则从节点需要向主节点进行身份验证；没有设置该选项，则不需要验证。从节点进行身份验证是通过向主节点发送auth命令进行的，auth命令的参数即为配置文件中的masterauth的值。<br>如果主节点设置密码的状态，与从节点masterauth的状态一致（一致是指都存在，且密码相同，或者都不存在），则身份验证通过，复制过程继续；如果不一致，则从节点断开socket连接，并重连。</p>
+<p><strong>步骤5：发送从节点端口信息</strong></p>
+<p>身份验证之后，从节点会向主节点发送其监听的端口号（前述例子中为6380），主节点将该信息保存到该从节点对应的客户端的slave_listening_port字段中；该端口信息除了在主节点中执行info Replication时显示以外，没有其他作用。</p>
+<h2 id="数据同步阶段"><a href="#数据同步阶段" class="headerlink" title="数据同步阶段"></a>数据同步阶段</h2><p><img src="https://img-blog.csdnimg.cn/20200517230547415.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br><strong>注意：</strong> Redis在复制进行期间也会尽可能的处理接收到的命令请求，但是，如果主从服务器之间的网络连接带宽不足，或者主服务器没有足够的内存来创建子进程和创建写命令的缓存区，那么Redis的运行效率必然受到影响。最好还是给主服务器留50%的内存</p>
+<h2 id="命令传播阶段"><a href="#命令传播阶段" class="headerlink" title="命令传播阶段"></a>命令传播阶段</h2><p>需要注意的是，命令传播是异步的过程，即主节点发送写命令后并不会等待从节点的回复；因此实际上主从节点之间很难保持实时的一致性，延迟在所难免。数据不一致的程度，与主从节点之间的网络状况、主节点写命令的执行频率、以及主节点中的repl-disable-tcp-nodelay配置等有关。</p>
+<p><code>repl-disable-tcp-nodelay no</code>：该配置作用于命令传播阶段，控制主节点是否禁止与从节点的TCP_NODELAY；默认no，即不禁止TCP_NODELAY。当设置为yes时，TCP会对包进行合并从而减少带宽，但是发送的频率会降低，从节点数据延迟增加，一致性变差；具体发送频率与Linux内核的配置有关，默认配置为40ms。当设置为no时，TCP会立马将主节点的数据发送给从节点，带宽增加但延迟变小。</p>
+<h1 id="各场景下复制的选择及优化技巧"><a href="#各场景下复制的选择及优化技巧" class="headerlink" title="各场景下复制的选择及优化技巧"></a>各场景下复制的选择及优化技巧</h1><blockquote>
+<p>现在我们可以来总结一下，在下面常见的场景中，何时使用部分复制，以及需要注意哪些问题。</p>
+</blockquote>
+<h2 id="第一次建立复制"><a href="#第一次建立复制" class="headerlink" title="第一次建立复制"></a>第一次建立复制</h2><p>此时全量复制不可避免，但仍有几点需要注意：<br>如果主节点的数据量较大，应该尽量避开流量的高峰期，避免造成阻塞；<br>如果有多个从节点需要建立对主节点的复制，可以考虑将几个从节点错开，避免主节点带宽占用过大。<br>如果从节点过多，也可以调整主从复制的拓扑结构，由一主多从结构变为树状结构（中间的节点既是其主节点的从节点，也是其从节点的主节点）；<br>但使用树状结构应该谨慎：虽然主节点的直接从节点减少，降低了主节点的负担，但是多层从节点的延迟增大，数据一致性变差；且结构复杂，维护相当困难。</p>
+<h2 id="主节点重启"><a href="#主节点重启" class="headerlink" title="主节点重启"></a>主节点重启</h2><p>主节点重启可以分为两种情况来讨论，一种是故障导致宕机，另一种则是有计划的重启。</p>
+<h2 id="主节点宕机"><a href="#主节点宕机" class="headerlink" title="主节点宕机"></a>主节点宕机</h2><p>主节点宕机重启后，runid会发生变化，因此不能进行部分复制，只能全量复制。<br>实际上在主节点宕机的情况下，应进行故障转移处理，将其中的一个从节点升级为主节点，其他从节点从新的主节点进行复制；且故障转移应尽量的自动化，后面文章将要介绍的哨兵便可以进行自动的故障转移。</p>
+<h2 id="从节点重启"><a href="#从节点重启" class="headerlink" title="从节点重启"></a>从节点重启</h2><p>从节点宕机重启后，其保存的主节点的runid会丢失，因此即使再次执行slaveof，也无法进行部分复制。</p>
+<h2 id="网络中断"><a href="#网络中断" class="headerlink" title="网络中断"></a>网络中断</h2><p>如果主从节点之间出现网络问题，造成短时间内网络中断，可以分为多种情况讨论。<br>第一种情况：网络问题时间极为短暂，只造成了短暂的丢包，主从节点都没有判定超时（未触发repl-timeout）；此时只需要通过REPLCONF ACK来补充丢失的数据即可。<br>第二种情况：网络问题时间很长，主从节点判断超时（触发了repl-timeout），且丢失的数据过多，超过了复制积压缓冲区所能存储的范围；此时主从节点无法进行部分复制，只能进行全量复制。为了尽可能避免这种情况的发生，应该根据实际情况适当调整复制积压缓冲区的大小；此外及时发现并修复网络中断，也可以减少全量复制。<br>第三种情况：介于前述两种情况之间，主从节点判断超时，且丢失的数据仍然都在复制积压缓冲区中；此时主从节点可以进行部分复制。</p>
+<h1 id="复制相关的配置"><a href="#复制相关的配置" class="headerlink" title="复制相关的配置"></a>复制相关的配置</h1><h2 id="与主从节点都有关的配置"><a href="#与主从节点都有关的配置" class="headerlink" title="与主从节点都有关的配置"></a>与主从节点都有关的配置</h2><p>首先介绍最特殊的配置，它决定了该节点是主节点还是从节点：<br>slaveof ：Redis启动时起作用；作用是建立复制关系，开启了该配置的Redis服务器在启动后成为从节点。该注释默认注释掉，即Redis服务器默认都是主节点。<br>repl-timeout 60：与各个阶段主从节点连接超时判断有关。</p>
+<h2 id="主节点相关配置"><a href="#主节点相关配置" class="headerlink" title="主节点相关配置"></a>主节点相关配置</h2><ul>
+<li>repl-diskless-sync no：作用于全量复制阶段，控制主节点是否使用diskless复制（无盘复制）。所谓diskless复制，是指在全量复制时，主节点不再先把数据写入RDB文件，而是直接写入slave的socket中，整个过程中不涉及硬盘；diskless复制在磁盘IO很慢而网速很快时更有优势。需要注意的是，截至Redis3.0，diskless复制处于实验阶段，默认是关闭的。</li>
+<li>repl-diskless-sync-delay 5：该配置作用于全量复制阶段，当主节点使用diskless复制时，该配置决定主节点向从节点发送之前停顿的时间，单位是秒；只有当diskless复制打开时有效，默认5s。之所以设置停顿时间，是基于以下两个考虑：<br>(1) 向slave的socket的传输一旦开始，新连接的slave只能等待当前数据传输结束，才能开始新的数据传输<br>(2) 多个从节点有较大的概率在短时间内建立主从复制。</li>
+<li>client-output-buffer-limit slave 256MB 64MB 60：与全量复制阶段主节点的缓冲区大小有关，见前面的介绍。</li>
+<li>repl-disable-tcp-nodelay no：与命令传播阶段的延迟有关，见前面的介绍。</li>
+<li>masterauth ：与连接建立阶段的身份验证有关，见前面的介绍。</li>
+<li>repl-ping-slave-period 10：与命令传播阶段主从节点的超时判断有关，见前面的介绍。</li>
+<li>repl-backlog-size 1mb：复制积压缓冲区的大小，见前面的介绍。</li>
+<li>repl-backlog-ttl 3600：当主节点没有从节点时，复制积压缓冲区保留的时间，这样当断开的从节点重新连进来时，可以进行全量复制；默认3600s。如果设置为0，则永远不会释放复制积压缓冲区。</li>
+<li>min-slaves-to-write 3与min-slaves-max-lag 10：规定了主节点的最小从节点数目，及对应的最大延迟，见前面的介绍。<br>从节点相关配置</li>
+<li>slave-serve-stale-data yes：与从节点数据陈旧时是否响应客户端命令有关，见前面的介绍。</li>
+<li>slave-read-only yes：从节点是否只读；默认是只读的。由于从节点开启写操作容易导致主从节点的数据不一致，因此该配置尽量不要修改。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
+<ul>
+<li>主从复制的作用：了解主从复制是为了解决什么样的问题，即数据冗余、故障恢复、读负载均衡等</li>
+<li>主从复制的操作：即slaveof命令</li>
+<li>主从复制的原理：主从复制包括了连接建立阶段、数据同步阶段、命令传播阶段</li>
+<li>应用中的问题：包括读写分离的问题（数据不一致问题、数据过期问题、故障切换问题等）、复制超时问题、复制中断问题等</li>
+<li>主从复制虽然解决或缓解了数据冗余、故障恢复、读负载均衡等问题，但其缺陷仍很明显：故障恢复无法自动化；写操作无法负载均衡；存储能力受到单机的限制；这些问题的解决，需要哨兵和集群的帮助。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" <i class="fa fa-tag"></i> Redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/17/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BF%9D%E9%9A%9C/" rel="next" title="Redis的数据安全与性能保障">
+                <i class="fa fa-chevron-left"></i> Redis的数据安全与性能保障
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/CodingGuN.jpg"
+                alt="CodeGuN" />
+            
+              <p class="site-author-name" itemprop="name">CodeGuN</p>
+              <p class="site-description motion-element" itemprop="description">Coding多一点 BUG少一点</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/TanDawn1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tanzhilan.hao@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tmb115115.github.io" title="Ycdi" target="_blank">Ycdi</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jiesunn.github.io" title="JieSunn" target="_blank">JieSunn</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#主从复制概述"><span class="nav-number">1.</span> <span class="nav-text">主从复制概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#主从复制的作用"><span class="nav-number">1.1.</span> <span class="nav-text">主从复制的作用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#如何使用主从复制"><span class="nav-number">2.</span> <span class="nav-text">如何使用主从复制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#三种方式开启主从复制"><span class="nav-number">2.1.</span> <span class="nav-text">三种方式开启主从复制</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主从复制的实现原理"><span class="nav-number">3.</span> <span class="nav-text">主从复制的实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#连接建立阶段"><span class="nav-number">3.1.</span> <span class="nav-text">连接建立阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据同步阶段"><span class="nav-number">3.2.</span> <span class="nav-text">数据同步阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令传播阶段"><span class="nav-number">3.3.</span> <span class="nav-text">命令传播阶段</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#各场景下复制的选择及优化技巧"><span class="nav-number">4.</span> <span class="nav-text">各场景下复制的选择及优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一次建立复制"><span class="nav-number">4.1.</span> <span class="nav-text">第一次建立复制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主节点重启"><span class="nav-number">4.2.</span> <span class="nav-text">主节点重启</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主节点宕机"><span class="nav-number">4.3.</span> <span class="nav-text">主节点宕机</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#从节点重启"><span class="nav-number">4.4.</span> <span class="nav-text">从节点重启</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络中断"><span class="nav-number">4.5.</span> <span class="nav-text">网络中断</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#复制相关的配置"><span class="nav-number">5.</span> <span class="nav-text">复制相关的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#与主从节点都有关的配置"><span class="nav-number">5.1.</span> <span class="nav-text">与主从节点都有关的配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主节点相关配置"><span class="nav-number">5.2.</span> <span class="nav-text">主节点相关配置</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CodeGuN</span>
+
+  
+</div>
+
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+ -->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

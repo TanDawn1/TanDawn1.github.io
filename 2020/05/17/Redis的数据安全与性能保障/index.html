@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/favicon.ico?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Redis," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="RDB持久化与AOF持久化">
+<meta name="keywords" content="Redis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Redis的数据安全与性能保障">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;05&#x2F;17&#x2F;Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BF%9D%E9%9A%9C&#x2F;index.html">
+<meta property="og:site_name" content="CodeGuN&#39;s Blog">
+<meta property="og:description" content="RDB持久化与AOF持久化">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2020051722393113.png">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200517225002915.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200517224934306.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2020-05-17T15:16:03.297Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2020051722393113.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/17/Redis的数据安全与性能保障/"/>
+
+
+
+
+
+  <title>Redis的数据安全与性能保障 | CodeGuN's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+	
+	<a href="https://your-url" target="_blank" rel="noopener" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#70B7FD; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">CodeGuN's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/17/Redis%E7%9A%84%E6%95%B0%E6%8D%AE%E5%AE%89%E5%85%A8%E4%B8%8E%E6%80%A7%E8%83%BD%E4%BF%9D%E9%9A%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="CodeGuN">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/CodingGuN.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="CodeGuN's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Redis的数据安全与性能保障</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-17T22:56:50+08:00">
+                2020-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center>
+ <i class="fa fa-quote-left"></i> RDB持久化与AOF持久化  <i class="fa fa-quote-right"></i>
+ </center>
+ <a id="more"></a>
+
+<h1 id="Redis持久化"><a href="#Redis持久化" class="headerlink" title="Redis持久化"></a>Redis持久化</h1><hr>
+<h2 id="RDB-快照持久化"><a href="#RDB-快照持久化" class="headerlink" title="RDB(快照持久化)"></a>RDB(快照持久化)</h2><p><img src="https://img-blog.csdnimg.cn/2020051722393113.png" alt="在这里插入图片描述"></p>
+<ul>
+<li><p>RDB文件的载入一般情况是自动的，redis服务器启动的时候如果检测到RDB文件的存在，那么redis会自动载入这个文件。<br><img src="https://img-blog.csdnimg.cn/20200517225002915.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+</li>
+<li><p>RDB保存的文件名：dump.rdb(二进制文件)</p>
+</li>
+<li><p>快照持久化是不可靠的，如果出问题，那么Redis将丢失最近一次创建快照之后写入的所有数据，会自动读取dump.rdb文件中的数据</p>
+</li>
+</ul>
+<p>redis.conf 配置</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"># 触发自动保存快照</span><br><span class="line"># save &lt;seconds&gt; &lt;changes&gt;</span><br><span class="line">save 900 1    # 900 秒内有至少有 1 个键被改动</span><br><span class="line">save 300 10   # 300 秒内有至少有 10 个键被改动</span><br><span class="line">save 60 10000 # 60 秒内有至少有 1000 个键被改动</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 设置在保存快照出错时，是否停止redis命令的写入</span><br><span class="line">stop-writes-on-bgsave-error yes</span><br><span class="line"></span><br><span class="line"># 是否在导出.rdb数据库文件的时候采用LZF压缩</span><br><span class="line">rdbcompression yes</span><br><span class="line"></span><br><span class="line">#  是否开启CRC64校验</span><br><span class="line">rdbchecksum yes</span><br><span class="line"></span><br><span class="line"># 导出数据库的文件名称</span><br><span class="line">dbfilename dump.rdb</span><br><span class="line"></span><br><span class="line"># 导出的数据库所在的目录</span><br><span class="line">dir ./</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="触发机制"><a href="#触发机制" class="headerlink" title="触发机制"></a>触发机制</h3><p>满足save规则的情况下，会自动触发RDB</p>
+<ul>
+<li><p>执行flushall命令</p>
+</li>
+<li><p>退出redis</p>
+</li>
+<li><p>执行BGSAVE、SAVE(不经常用,需要等待持久化完毕)</p>
+</li>
+<li><p>SYNC复制</p>
+<h3 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h3></li>
+<li><p>RDB是一个非常紧凑（有压缩）的文件,它保存了某个时间点的数据,非常适用于数据的备份。</p>
+</li>
+<li><p>RDB作为一个非常紧凑（有压缩）的文件，可以很方便传送到另一个远端数据中心 ，非常适用于灾难恢复.</p>
+</li>
+<li><p>RDB在保存RDB文件时父进程唯一需要做的就是fork出一个子进程,接下来的工作全部由子进程来做，<br>父进程不需要再做其他IO操作，所以RDB持久化方式可以最大化redis的性能.</p>
+</li>
+<li><p>与AOF相比,在恢复大的数据集的时候，RDB方式会更快一些.</p>
+</li>
+</ul>
+<h3 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h3><ul>
+<li><p>RDB容易造成数据的丢失。假设每5分钟保存一次快照，如果Redis因为某些原因不能正常工作，<br>那么从上次产生快照到Redis出现问题这段时间的数据就会丢失了。</p>
+</li>
+<li><p>RDB使用fork()产生子进程进行数据的持久化，如果数据比较大的话可能就会花费点时间，造成Redis停止服务几毫秒。如果数据量很大且CPU性能不是很好的时候，停止服务的时间甚至会到1秒。</p>
+</li>
+</ul>
+<p>Redis进程每占用1GB内存，fork()产生子进程所需的时间就要增加200ms~300ms</p>
+<h2 id="AOF"><a href="#AOF" class="headerlink" title="AOF"></a>AOF</h2><blockquote>
+<p>相对于RDB的不可靠，AOF则提供了一种类似于数据库binlog的方式 ，更为可靠。</p>
+<p>简单来说AOF持久化会将被执行的命令写到AOF文件的末尾，所以Redis只要从头到尾执行一次AOF文件包含的所有写命令，就可以恢复数据集了。但对于大数据环境就比较慢了。</p>
+</blockquote>
+<p>AOF保存的文件名:  appendonly.aof </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//将conf文件中的配置选项配置为yes</span><br><span class="line">appendonly yes   </span><br><span class="line"></span><br><span class="line">//在客户端输入如下命令也可，但是Redis服务器重启后会失效</span><br><span class="line">127.0.0.1:6379&gt; config set appendonly yes</span><br><span class="line">OK</span><br></pre></td></tr></table></figure>
+
+<p><strong>关于文件的写入和同步的资料</strong></p>
+<blockquote>
+<p>因为为了提高文件的写入效率，在现代操作系统中，当用户调用write函数，将一些数据写入到文件的时候，os通常会将写入数据暂时保存在一个内存缓冲区里面（例如，unix系统实现在内核中设有缓冲区高速缓存或页高速缓存，当我们向文件写入数据时，内核通常先将数据复制到缓冲区中，然后排入队列，晚些时候再写入磁盘），这种方式称为延迟写，等到缓冲区的空间被填满，或者超过了指定的时限，或者内核需要重用缓冲区存放其它磁盘块数据时，才会真正将缓冲区中的所有数据写入到磁盘里面。<br>文件写入：只是写入到了内存缓冲区，可能还没有写到文件所拥有的磁盘数据块上 文件同步：将缓冲区中的内容冲洗到磁盘上</p>
+<p>为了兼顾性能和数据安全，可以使用 appendfsync everysec<br>选项，让Redis以每秒一次的频率对AOF文件进行同步。Redis同步一次AOF时的性能和不使用任何持久化特性时的性能相差无几。即使出现数据丢失也只丢失1s的<br>appendfsync  no<br>选项则是让操作系统决定什么时候进行AOF文件同步，一般情况下对Redis的性能无影响，但是一旦服务器宕机，就会丢失不定量的数据。如果用户的磁盘处理写入操作的速度不够快的话，缓冲区被等待写入硬盘的数据填满的时，Redis的写入操作就会阻塞，并导致Redis处理命令请求的速度变慢。</p>
+</blockquote>
+<h3 id="重写-压缩-AOF文件"><a href="#重写-压缩-AOF文件" class="headerlink" title="重写/压缩 AOF文件"></a>重写/压缩 AOF文件</h3><ol>
+<li>随着Redis的不断运行，AOF文件体积也会越来越大，极端情况下可能用完服务器的存储空间</li>
+<li>Redis重启后 需要通过重新载入AOF文件记录来还原数据集，如果AOF文件过大，还原的时间将会非常长。<ol start="3">
+<li>为了解决这个问题 —&gt; Redis用户可以执行 BGREWRITEAOF 命令，将会通过移除AOF文件中冗余命令来重写AOF文件，使AOF文件尽可能的小。</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">6379</span>&gt; BGREWRITEAOF</span><br><span class="line">Background append only file rewriting started</span><br></pre></td></tr></table></figure>
+
+<p><strong>BGREWRITEAOF的工作原理和BGSAVE非常类似，存在的问题也是相似的</strong><br>AOF可以通过设置<code>auto-aof-rewrite-percentage</code>和<code>auto-aof-rewrite-min-size</code>选项来自动执行BGREWRITEAOF 参数如下</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto-aof-rewrite-percentage 100 #当前AOF文件大小和上一次重写时AOF文件大小的比值</span><br><span class="line">auto-aof-rewrite-min-size 64mb  #文件的最小体积</span><br></pre></td></tr></table></figure>
+<h3 id="载入与数据还原"><a href="#载入与数据还原" class="headerlink" title="载入与数据还原"></a>载入与数据还原</h3><p>读取AOF文件并还原数据库的步骤如下</p>
+<ol>
+<li>创建一个不带网络连接的伪客户端</li>
+<li>从AOF文件中分析并读取出一条写命令</li>
+<li>使用伪客户端执行被读出的写命令<br><img src="https://img-blog.csdnimg.cn/20200517224934306.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>一直执行步骤2、3，直到AOF文件中的所有写命令都被处理完毕为止</li>
+</ol>
+<p><strong>这时可能会出现一个问题。</strong> 服务器可能在程序正在对 AOF 文件进行写入时停机，造成了 AOF 文件出错，那么 Redis 在重启时会拒绝载入这个 AOF 文件，从而确保数据的一致性不会被破坏 当发生这种情况时， 可以用以下方法来修复出错的 AOF 文件：</p>
+<ul>
+<li>为现有的 AOF 文件创建一个备份。</li>
+<li>使用 Redis 附带的 <code>redis-check-aof</code> 程序，对原来的 AOF 文件进行修复: <code>redis-check-aof –fix</code></li>
+<li>（可选）使用 diff -u 对比修复后的 AOF 文件和原始 AOF 文件的备份，查看两个文件之间的不同之处。</li>
+<li>重启 Redis 服务器，等待服务器载入修复后的 AOF 文件，并进行数据恢复。</li>
+</ul>
+<p>另外redis.conf配置文件中还提供了一个参数来控制是否忽略最后一条可能存在问题的指令，如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aof-load-truncated yes</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="优点"><a href="#优点" class="headerlink" title="优点:"></a>优点:</h3><ul>
+<li><p>比RDB可靠。可以指定不同的fsync策略: always、everysec、no </p>
+</li>
+<li><p>AOF日志文件是一个纯追加的文件，就算是突然断电也不会出现日志的定位或者损坏的问题。</p>
+</li>
+<li><p>当AOF文件太大时，Redis可以配置后台重写，重写很安全，类似于RDB一样会在一个新文件上进行，同时Redis会继续往旧的文件追加数据。新文件上会写入能重建当前数据集的最小操作命令的集合。<br>当新文件重写完，Redis会把新旧文件进行切换，然后开始把数据写到新文件上。</p>
+</li>
+<li><p>AOF把操作命令以简单易懂的格式一条接一条的保存在文件里，很容易导出来用于恢复数据。<br>例如我们不小心用FLUSHALL命令把所有数据刷掉了，只要文件没有被重写，我们可以把服务停掉，把最后那条命令删掉，然后重启服务，这样就能把被刷掉的数据恢复回来。</p>
+</li>
+</ul>
+<h3 id="缺点：-1"><a href="#缺点：-1" class="headerlink" title="缺点："></a>缺点：</h3><ul>
+<li><p>在相同的数据集下，AOF文件的大小一般会比RDB文件大。</p>
+</li>
+<li><p>在某些fsync策略下，AOF的速度会比RDB慢。通常fsync设置为每秒一次就能获得比较高的性能，而在禁止fsync的情况下速度可以达到RDB的水平。</p>
+</li>
+<li><p>在过去 曾经发现一些很罕见的BUG导致使用AOF重建的数据跟原数据不一致的问题。</p>
+</li>
+</ul>
+<h1 id="方案选择与常见问题"><a href="#方案选择与常见问题" class="headerlink" title="方案选择与常见问题"></a>方案选择与常见问题</h1><hr>
+<h2 id="持久化策略选择"><a href="#持久化策略选择" class="headerlink" title="持久化策略选择"></a>持久化策略选择</h2><p>要明白无论是RDB还是AOF，持久化的开启都是要付出性能方面代价的：<br>对于RDB持久化，一方面是BGSAVE在进行fork操作时Redis主进程会阻塞，另一方面，子进程向硬盘写数据也会带来IO压力；</p>
+<p>对于AOF持久化，向硬盘写数据的频率大大提高(everysec策略下为秒级)，IO压力更大，甚至可能造成AOF追加阻塞问题（后面会详细介绍这种阻塞）；</p>
+<p>此外，AOF文件的重写与RDB的BGSAVE类似，会有fork时的阻塞和子进程的IO压力问题。</p>
+<p>相对来说，由于AOF向硬盘中写数据的频率更高，因此对Redis主进程性能的影响会更大。</p>
+<p><strong>Redis恢复数据时会先检查AOF文件是否存在，如果不存在就尝试加载RDB文件。</strong></p>
+<p>在实际生产环境中，根据数据量、应用对数据的安全要求、预算限制等不同情况，会有各种各样的持久化策略。如完全不使用任何持久化、使用RDB或AOF的一种，或同时开启RDB和AOF持久化等。此外，持久化的选择必须与Redis的主从策略一起考虑，因为主从复制与持久化同样具有数据备份的功能，而且主机master和从机slave可以独立的选择持久化方案。</p>
+<h3 id="根据场景来分析"><a href="#根据场景来分析" class="headerlink" title="根据场景来分析"></a>根据场景来分析</h3><p>（1）如果Redis中的数据完全丢弃也没有关系（如Redis完全用作DB层数据的cache），那么无论是单机，还是主从架构，都可以不进行任何持久化。</p>
+<p>（2）在单机环境下（对于个人开发者，这种情况可能比较常见），如果可以接受十几分钟或更多的数据丢失，选择RDB对Redis的性能更加有利；如果只能接受秒级别的数据丢失，应该选择AOF。</p>
+<p>（3）但在多数情况下，我们都会配置主从环境，slave的存在既可以实现数据的热备，也可以进行读写分离分担Redis读请求，以及在master宕掉后继续提供服务。在这种情况下，一种可行的做法是：<br>master：完全关闭持久化（包括RDB和AOF），这样可以让master的性能达到最好<br>slave：关闭RDB，开启AOF（如果对数据安全要求不高，开启RDB关闭AOF也可以），并定时对持久化文件进行备份（如备份到其他文件夹，并标记好备份的时间）；然后关闭AOF的自动重写，然后添加定时任务，在每天Redis闲时（如凌晨12点）调用bgrewriteaof。</p>
+<p><strong>为什么开启了主从复制，可以实现数据的热备份，还需要设置持久化呢？</strong></p>
+<p>因为在一些特殊情况下，主从复制仍然不足以保证数据的安全，例如：</p>
+<p>master和slave进程同时停止：考虑这样一种场景，如果master和slave在同一栋大楼或同一个机房，则一次停电事故就可能导致master和slave机器同时关机，Redis进程停止；如果没有持久化，则面临的是数据的完全丢失。<br>master误重启：考虑这样一种场景，master服务因为故障宕掉了，如果系统中有自动拉起机制（即检测到服务停止后重启该服务）将master自动重启，由于没有持久化文件，那么master重启后数据是空的，slave同步数据也变成了空的；如果master和slave都没有持久化，同样会面临数据的完全丢失。需要注意的是，即便是使用了哨兵(关于哨兵后面会有文章介绍)进行自动的主从切换，也有可能在哨兵轮询到master之前，便被自动拉起机制重启了。因此，应尽量避免“自动拉起机制”和“不做持久化”同时出现。</p>
+<p>（4）异地灾备：上述讨论的几种持久化策略，针对的都是一般的系统故障，如进程异常退出、宕机、断电等，这些故障不会损坏硬盘。但是对于一些可能导致硬盘损坏的灾难情况，如火灾地震，就需要进行异地灾备。例如对于单机的情形，可以定时将RDB文件或重写后的AOF文件，通过scp拷贝到远程机器，如阿里云、AWS等；对于主从的情形，可以定时在master上执行bgsave，然后将RDB文件拷贝到远程机器，或者在slave上执行bgrewriteaof重写AOF文件后，将AOF文件拷贝到远程机器上。一般来说，由于RDB文件文件小、恢复快，因此灾难恢复常用RDB文件；异地备份的频率根据数据安全性的需要及其他条件来确定，但最好不要低于一天一次。</p>
+<h2 id="fork阻塞：CPU的阻塞"><a href="#fork阻塞：CPU的阻塞" class="headerlink" title="fork阻塞：CPU的阻塞"></a>fork阻塞：CPU的阻塞</h2><p>在Redis的实践中，众多因素限制了Redis单机的内存不能过大，例如：<br>当面对请求的暴增，需要从库扩容时，Redis内存过大会导致扩容时间太长；<br>当主机宕机时，切换主机后需要挂载从库，Redis内存过大导致挂载速度过慢；</p>
+<p>以及持久化过程中的fork操作，下面详细说明。<br>首先说明一下fork操作：</p>
+<p>父进程通过fork操作可以创建子进程；子进程创建后，父子进程共享代码段，不共享进程的数据空间，但是子进程会获得父进程的数据空间的副本。<br>在操作系统fork的实际实现中，基本都采用了写时复制技术，即在父/子进程试图修改数据空间之前，父子进程实际上共享数据空间；但是当父/子进程的任何一个试图修改数据空间时，操作系统会为修改的那一部分(内存的一页)制作一个副本。</p>
+<p>虽然fork时，子进程不会复制父进程的数据空间，但是会复制内存页表（页表相当于内存的索引、目录）；父进程的数据空间越大，内存页表越大，fork时复制耗时也会越多。</p>
+<p>在Redis中，无论是RDB持久化的bgsave，还是AOF重写的bgrewriteaof，都需要fork出子进程来进行操作。如果Redis内存过大，会导致fork操作时复制内存页表耗时过多；而Redis主进程在进行fork时，是完全阻塞的，也就意味着无法响应客户端的请求，会造成请求延迟过大。</p>
+<p>为了减轻fork操作带来的阻塞问题，除了控制Redis单机内存的大小以外，还可以适度放宽AOF重写的触发条件、选用物理机或高效支持fork操作的虚拟化技术等</p>
+<h2 id="AOF追加阻塞：硬盘的阻塞"><a href="#AOF追加阻塞：硬盘的阻塞" class="headerlink" title="AOF追加阻塞：硬盘的阻塞"></a>AOF追加阻塞：硬盘的阻塞</h2><p>在AOF中，如果AOF缓冲区的文件同步策略为everysec，则：在主线程中，命令写入aof_buf后调用系统write操作，write完成后主线程返回；fsync同步文件操作由专门的文件同步线程每秒调用一次。<br>这种做法的问题在于，如果硬盘负载过高，那么fsync操作可能会超过1s；如果Redis主线程持续高速向aof_buf写入命令，硬盘的负载可能会越来越大，IO资源消耗更快；如果此时Redis进程异常退出，丢失的数据也会越来越多，可能远超过1s。<br>为此，Redis的处理策略是这样的：主线程每次进行AOF会对比上次fsync成功的时间；如果距上次不到2s，主线程直接返回；如果超过2s，则主线程阻塞直到fsync同步完成。因此，如果系统硬盘负载过大导致fsync速度太慢，会导致Redis主线程的阻塞；此外，使用everysec配置，AOF最多可能丢失2s的数据，而不是1s。<br>AOF追加阻塞问题定位的方法：<br>（1）监控info Persistence中的aof_delayed_fsync：当AOF追加阻塞发生时（即主线程等待fsync而阻塞），该指标累加。<br>（2）AOF阻塞时的Redis日志：<br>Asynchronous AOF fsync is taking too long (disk is busy?). Writing the AOF buffer without waiting for fsync to complete, this may slow down Redis.<br>（3）如果AOF追加阻塞频繁发生，说明系统的硬盘负载太大；可以考虑更换IO速度更快的硬盘，或者通过IO监控分析工具对系统的IO负载进行分析，如iostat（系统级io）、iotop（io版的top）、pidstat等。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><hr>
+<ul>
+<li>持久化在Redis高可用中的作用：数据备份，与主从复制相比强调的是由内存到硬盘的备份。</li>
+<li>RDB持久化：将数据快照备份到硬盘；介绍了其触发条件（包括手动出发和自动触发）、执行流程、RDB文件等，特别需要注意的是文件保存操作由fork出的子进程来进行。</li>
+<li>AOF持久化：将执行的写命令备份到硬盘（类似于MySQL的binlog），介绍了其开启方法、执行流程等，特别需要注意的是文件同步策略的选择（everysec）、文件重写的流程。</li>
+<li>一些现实的问题：包括如何选择持久化策略，以及需要注意的fork阻塞、AOF追加阻塞等。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" <i class="fa fa-tag"></i> Redis</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/17/Redis%E7%9A%84%E7%89%B9%E6%80%A7%E5%92%8C%E4%BC%98%E5%8A%BF/" rel="next" title="Redis的特性和优势">
+                <i class="fa fa-chevron-left"></i> Redis的特性和优势
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/17/Redis%E9%9B%86%E7%BE%A4%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" rel="prev" title="Redis集群主从复制">
+                Redis集群主从复制 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/CodingGuN.jpg"
+                alt="CodeGuN" />
+            
+              <p class="site-author-name" itemprop="name">CodeGuN</p>
+              <p class="site-description motion-element" itemprop="description">Coding多一点 BUG少一点</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/TanDawn1" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:tanzhilan.hao@foxmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tmb115115.github.io" title="Ycdi" target="_blank">Ycdi</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://jiesunn.github.io" title="JieSunn" target="_blank">JieSunn</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis持久化"><span class="nav-number">1.</span> <span class="nav-text">Redis持久化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RDB-快照持久化"><span class="nav-number">1.1.</span> <span class="nav-text">RDB(快照持久化)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#触发机制"><span class="nav-number">1.1.1.</span> <span class="nav-text">触发机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点："><span class="nav-number">1.1.2.</span> <span class="nav-text">优点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点："><span class="nav-number">1.1.3.</span> <span class="nav-text">缺点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF"><span class="nav-number">1.2.</span> <span class="nav-text">AOF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重写-压缩-AOF文件"><span class="nav-number">1.2.1.</span> <span class="nav-text">重写/压缩 AOF文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#载入与数据还原"><span class="nav-number">1.2.2.</span> <span class="nav-text">载入与数据还原</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优点"><span class="nav-number">1.2.3.</span> <span class="nav-text">优点:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺点：-1"><span class="nav-number">1.2.4.</span> <span class="nav-text">缺点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#方案选择与常见问题"><span class="nav-number">2.</span> <span class="nav-text">方案选择与常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#持久化策略选择"><span class="nav-number">2.1.</span> <span class="nav-text">持久化策略选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#根据场景来分析"><span class="nav-number">2.1.1.</span> <span class="nav-text">根据场景来分析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fork阻塞：CPU的阻塞"><span class="nav-number">2.2.</span> <span class="nav-text">fork阻塞：CPU的阻塞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AOF追加阻塞：硬盘的阻塞"><span class="nav-number">2.3.</span> <span class="nav-text">AOF追加阻塞：硬盘的阻塞</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">CodeGuN</span>
+
+  
+</div>
+
+<!--
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+ -->
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
