@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="java,并发编程," />
+  <meta name="keywords" content="Redis," />
 
 
 
@@ -79,21 +79,20 @@
 
 
 
-<meta name="description" content="如何确保线程安全">
-<meta name="keywords" content="java,并发编程">
+<meta name="description" content="缓存穿透、雪崩、击穿 该如何优雅的解决">
+<meta name="keywords" content="Redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="线程安全和死锁">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;09&#x2F;%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E5%92%8C%E6%AD%BB%E9%94%81&#x2F;index.html">
+<meta property="og:title" content="缓存应用问题解决方案">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;06&#x2F;13&#x2F;%E7%BC%93%E5%AD%98%E5%BA%94%E7%94%A8%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88&#x2F;index.html">
 <meta property="og:site_name" content="CodeGuN&#39;s Blog">
-<meta property="og:description" content="如何确保线程安全">
+<meta property="og:description" content="缓存穿透、雪崩、击穿 该如何优雅的解决">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200209214819104.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;2020020921482487.png">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200209214835280.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
-<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200209214842769.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
-<meta property="og:updated_time" content="2020-05-15T04:40:08.284Z">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200613103246959.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200613103510113.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200613103557579.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
+<meta property="og:updated_time" content="2020-06-13T02:44:59.200Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200209214819104.png">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;img-blog.csdnimg.cn&#x2F;20200613103246959.png?x-oss-process=image&#x2F;watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70">
 
 
 
@@ -123,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2020/02/09/线程安全和死锁/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/06/13/缓存应用问题解决方案/"/>
 
 
 
 
 
-  <title>线程安全和死锁 | CodeGuN's Blog</title>
+  <title>缓存应用问题解决方案 | CodeGuN's Blog</title>
   
 
 
@@ -258,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/09/%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E5%92%8C%E6%AD%BB%E9%94%81/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/%E7%BC%93%E5%AD%98%E5%BA%94%E7%94%A8%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="CodeGuN">
@@ -275,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">线程安全和死锁</h1>
+          <h1 class="post-title" itemprop="name headline">缓存应用问题解决方案</h1>
         
 
         <div class="post-meta">
@@ -287,8 +286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-09T21:51:00+08:00">
-                2020-02-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-13T10:41:47+08:00">
+                2020-06-13
               </time>
             
 
@@ -297,6 +296,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -326,40 +347,48 @@
 
       
         <center>
- <i class="fa fa-quote-left"></i> 如何确保线程安全     <i class="fa fa-quote-right"></i>
+ <i class="fa fa-quote-left"></i> 缓存穿透、雪崩、击穿 该如何优雅的解决  <i class="fa fa-quote-right"></i>
  </center>
+ <a id="more"></a>
 
-
-<a id="more"></a>
-
-<h1 id="线程安全"><a href="#线程安全" class="headerlink" title="线程安全"></a>线程安全</h1><p>一个类被多个线程以任意方式同时调用，且不需要外部额外同步和协同的情况下，任然保持内部数据正确且表现正确的行为，那么这个类就是线程安全的。</p>
-<p>不可变的对象一定是线程安全的<br>举例：</p>
-<ol>
-<li>final修饰的不可变类，如String，Integer等</li>
-<li>enum枚举类<br>final修饰的类和属性一定线程安全？</li>
-<li>当你创建一个对象时，使用final关键字能够使得另一个线程不会访问到处于“部分创建”的对象，否则是会可能发生的。</li>
-<li>final只是用来保证值是不能被直接覆盖的。</li>
-</ol>
-<h1 id="同步异步"><a href="#同步异步" class="headerlink" title="同步异步"></a>同步异步</h1><p>同步概念：阻塞式调用，调用方法必须等待响应方执行完毕才会返回<br><img src="https://img-blog.csdnimg.cn/20200209214819104.png" alt="在这里插入图片描述"><br>异步概念：非阻塞式调用，立即返回，调用方无需等待响应方返回实际结果，响应方会通过状态、通知或回调来告知调用方<br><img src="https://img-blog.csdnimg.cn/2020020921482487.png" alt="在这里插入图片描述"></p>
-<h1 id="阻塞非阻塞"><a href="#阻塞非阻塞" class="headerlink" title="阻塞非阻塞"></a>阻塞非阻塞</h1><p>阻塞：调用结果返回之前，当前线程会被挂起，调用线程只有在得到结果之后才会返回</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> port = <span class="number">8080</span>;</span><br><span class="line">ServerSocket server = <span class="keyword">new</span> ServerSocket(port);</span><br><span class="line">Socket socket = server.accept();</span><br></pre></td></tr></table></figure>
-
-<p>非阻塞：指在不能立即得到结果之前，该调用不会阻塞当前线程，而会立即返回。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Socket socket = <span class="keyword">new</span> Socket(<span class="string">"127.0.0.1"</span>,<span class="number">8080</span>);</span><br><span class="line">BufferedWriter bufferedWriter = <span class="keyword">new</span> BufferedWriter(</span><br><span class="line">                                <span class="keyword">new</span> OutputStreamWriter(socket.getOutputStream()));</span><br><span class="line">String str = <span class="string">"hello"</span>;</span><br><span class="line">bufferedWriter.write(str);</span><br></pre></td></tr></table></figure>
-
-<h1 id="线程的并发和并行"><a href="#线程的并发和并行" class="headerlink" title="线程的并发和并行"></a>线程的并发和并行</h1><p>并发：逻辑上的同时处理。能处理多个事件，但是并不一定是同时进行的。<br>由系统的调度，让不同的线程在不同的小时的时间段内执行各自的线程任务逻辑。<br><img src="https://img-blog.csdnimg.cn/20200209214835280.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>并行：物理或是实际的同时处理。能在同一时刻处理多个事件。<br><img src="https://img-blog.csdnimg.cn/20200209214842769.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h1 id="线程方法"><a href="#线程方法" class="headerlink" title="线程方法"></a>线程方法</h1><p><strong>Thread.yield()</strong><br>线程让步，使用了这个方法，当前线程就会退出CPU时间片，让其他线程或当前线程使用CPU时间片执行<br><strong>Thread.sleep()</strong><br>线程休眠，主动让出当前CPU时间，在指定时间过后，CPU会返回继续执行该线程。sleep方法不会释放当前所持有的锁<br><strong>Thread.join()</strong><br>等待该线程死亡/终止，当前线程会等待调用该方法的线程执行完毕后才能继续执行<br><strong>Object.wait()</strong><br>Object类的方法，调用前必须拥有对象锁，例如Synchronized代码块内，调用wait方法后，对象锁会释放，线程进入WAITING等待状态</p>
-<h1 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h1><blockquote>
-<p><a href="https://tandawn1.github.io/2019/11/04/%E7%BA%BF%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E7%B1%BB/" target="_blank" rel="noopener">https://tandawn1.github.io/2019/11/04/%E7%BA%BF%E7%A8%8B-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E7%B1%BB/</a></p>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><hr>
+<blockquote>
+<p>我们平常的项目中多多少少都会使用到缓存，因为一些数据我们没有必要每次查询都查询数据库，对于高并发的项目，每次都查询数据库，对数据库是灾难性的！！！</p>
 </blockquote>
-<p>死锁的原因：两个及以上的线程，抢占2把及以上的锁，抢占锁的顺序不一致</p>
-<h2 id="避免和处理死锁问题"><a href="#避免和处理死锁问题" class="headerlink" title="避免和处理死锁问题"></a>避免和处理死锁问题</h2><ol>
-<li>不使用锁，不使用2把及以上的锁</li>
-<li>必须使用2把及以上的锁的时候，确保在整个应用程序中获取锁的顺序是一直到。</li>
-<li>尝试获取具有超时释放的锁，例如Lock中的tryLock来获取锁</li>
-<li>当发生了jave-level的锁时，重启程序来干掉进程/线程</li>
+<p>当我们查询一条数据的时候，先去查询缓存，如果有缓存就直接返回，如果没有才会去查数据库，然后返回。<br><img src="https://img-blog.csdnimg.cn/20200613103246959.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h1 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h1><hr>
+<h2 id="什么是缓存穿透"><a href="#什么是缓存穿透" class="headerlink" title="什么是缓存穿透"></a>什么是缓存穿透</h2><p>正常情况下，我们去查询数据都是存在。<br>那么请求去查询一条压根儿数据库中根本就不存在的数据，也就是缓存和数据库都查询不到这条数据，但是请求每次都会打到数据库上面去。<br>这种查询不存在数据的现象我们称为缓存穿透。</p>
+<h2 id="会带来的问题"><a href="#会带来的问题" class="headerlink" title="会带来的问题"></a>会带来的问题</h2><p>如果有黑客会对你的系统进行攻击，拿一个不存在的id 去查询数据，会产生大量的请求到数据库去查询。可能会导致你的数据库由于压力过大而宕掉。</p>
+<h2 id="怎么解决"><a href="#怎么解决" class="headerlink" title="怎么解决"></a>怎么解决</h2><ol>
+<li>缓存空值<br>之所以会发生穿透，就是因为缓存中没有存储这些空数据的key。从而导致每次查询都              到数据库去了。那么我们就可以为这些key对应的值设置为null 丢到缓存里面去。后面再出现查询这个key 的请求的时候，直接返回null 。这样，就不用在到数据库中去走一圈了<ol start="2">
+<li>BloomFilter(布隆过滤器)<br>布隆过滤器可以用于检索一个元素是否在一个集合中。<br>优点是空间效率和查询时间都远远超过一般的算法，<br>缺点是有一定的误识别率和删除困难。<br><img src="https://img-blog.csdnimg.cn/20200613103510113.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
 </ol>
-<h2 id="定位死锁问题"><a href="#定位死锁问题" class="headerlink" title="定位死锁问题"></a>定位死锁问题</h2><p>命令 jps：列举正在运行的JAVA虚拟机进程并显示虚拟机执行的主类以及这些进程的唯一ID(PID)<br>命令jstack：用于JVM当前时刻的线程快照，得到JVM当前每一条线程正在执行的堆栈信息，定位线程长时间卡顿问题，如死锁、死循环等问题</p>
+<strong>原理：</strong><br>布隆过滤器的原理是，当一个元素被加入集合时，通过K个散列函数将这个元素映射成一个位数组中的K个点，把它们置为1。检索时，我们只要看看这些点是不是都是1就（大约）知道集合中有没有它了：如果这些点有任何一个0，则被检元素一定不在；如果都是1，则被检元素很可能在。这就是布隆过滤器的基本思想。<br><a href="https://space.bilibili.com/130763764/article" target="_blank" rel="noopener">图片源地址</a><br><img src="https://img-blog.csdnimg.cn/20200613103557579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3MTk1Ng==,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></li>
+</ol>
+<p>简而言之，言而简之就是我们先把我们数据库的数据都加载到我们的过滤器中，比如数据库的id现在有：1、2、3</p>
+<p>那就用id：1 为例子他在上图中经过三次hash之后，把三次原本值0的地方改为1</p>
+<p>下次数据进来查询的时候如果id的值是1，那么我就把1拿去三次hash 发现三次hash的值，跟上面的三个位置完全一样，那就能证明过滤器中有1的<br>反之如果不一样就说明不存在了</p>
+<h2 id="怎么选择方案"><a href="#怎么选择方案" class="headerlink" title="怎么选择方案"></a>怎么选择方案</h2><ul>
+<li>针对于一些恶意攻击，攻击带过来的大量key 是不存在的 ——&gt; 方案二</li>
+<li>对于空数据的key有限的，重复率比较高的 ——&gt; 方案一</li>
+</ul>
+<h1 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h1><hr>
+<h2 id="什么是缓存击穿"><a href="#什么是缓存击穿" class="headerlink" title="什么是缓存击穿"></a>什么是缓存击穿</h2><p>在高并发的系统中，大量的请求同时查询一个key时，此时key正好失效，就会导致大量的请求直接打到DB上，这种现象称作缓存击穿</p>
+<h2 id="带来的问题"><a href="#带来的问题" class="headerlink" title="带来的问题"></a>带来的问题</h2><p>造成某一时间点数据库请求量过大，压力剧增，可能导致数据库服务宕机</p>
+<h2 id="如何解决"><a href="#如何解决" class="headerlink" title="如何解决"></a>如何解决</h2><p>多个线程同时去查询数据库的这条数据，那么我们可以在第一个查询数据的请求上使用一个 互斥锁来锁住它。其他的线程走到这一步拿不到锁就等着，等第一个线程查询到了数据，然后做缓存。后面的线程进来发现已经有缓存了，就直接走缓存。(俗称的双重检测)</p>
+<h1 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h1><hr>
+<h2 id="什么是缓存雪崩"><a href="#什么是缓存雪崩" class="headerlink" title="什么是缓存雪崩"></a>什么是缓存雪崩</h2><p>某一时刻缓存大规模的失效(缓存服务宕机、大量缓存失效…)会有大量的请求进来直接打到DB上。<br>带来的问题<br>大量请求打到DB上，导致DB宕机</p>
+<h2 id="如何解决-1"><a href="#如何解决-1" class="headerlink" title="如何解决"></a>如何解决</h2><h3 id="事前："><a href="#事前：" class="headerlink" title="事前："></a>事前：</h3><ul>
+<li>热点数据过期时间设置为不过期</li>
+<li>使用集群缓存，保证缓存服务的高可用</li>
+</ul>
+<p>这种方案就是在发生雪崩前对缓存集群实现高可用，如果是使用 Redis，可以使用 主从+哨兵 ，Redis Cluster 来避免 Redis 全盘崩溃的情况。</p>
+<h3 id="事中："><a href="#事中：" class="headerlink" title="事中："></a>事中：</h3><ul>
+<li>本地缓存、限流降级，避免DB被打挂</li>
+<li>使用 ehcache 本地缓存的目的也是考虑在 Redis Cluster 完全不可用的时候，ehcache 本地缓存还能够支撑一阵。</li>
+<li>使用 Hystrix进行限流 &amp; 降级 ，比如一秒来了5000个请求，我们可以设置假设只能有一 秒 2000个请求能通过这个组件，那么其他剩余的 3000 请求就会走限流逻辑。然后去调用我们自己开发的降级组件（降级），比如设置的一些默认值呀之类的。以此来保护最后的 MySQL 不会被大量的请求给打死。<h3 id="事后："><a href="#事后：" class="headerlink" title="事后："></a>事后：</h3></li>
+<li>开启Redis持久化机制，尽快恢复缓存集群<br>一旦重启，就能从磁盘上自动加载数据恢复内存中的数据。</li>
+</ul>
 
       
     </div>
@@ -377,9 +406,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/java/" <i class="fa fa-tag"></i> java</a>
-          
-            <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" <i class="fa fa-tag"></i> 并发编程</a>
+            <a href="/tags/Redis/" <i class="fa fa-tag"></i> Redis</a>
           
         </div>
       
@@ -392,8 +419,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/02/08/JavaEE%E5%A4%8D%E4%B9%A0%E4%B8%80/" rel="next" title="JavaEE复习一">
-                <i class="fa fa-chevron-left"></i> JavaEE复习一
+              <a href="/2020/06/13/Redis%E5%AE%9E%E7%8E%B0%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" rel="next" title="Redis实现分布式锁">
+                <i class="fa fa-chevron-left"></i> Redis实现分布式锁
               </a>
             
           </div>
@@ -401,10 +428,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/02/10/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E5%85%B3%E9%94%AE%E5%AD%97/" rel="prev" title="内存模型和关键字">
-                内存模型和关键字 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -574,7 +597,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#线程安全"><span class="nav-number">1.</span> <span class="nav-text">线程安全</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#同步异步"><span class="nav-number">2.</span> <span class="nav-text">同步异步</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#阻塞非阻塞"><span class="nav-number">3.</span> <span class="nav-text">阻塞非阻塞</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程的并发和并行"><span class="nav-number">4.</span> <span class="nav-text">线程的并发和并行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#线程方法"><span class="nav-number">5.</span> <span class="nav-text">线程方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#死锁"><span class="nav-number">6.</span> <span class="nav-text">死锁</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#避免和处理死锁问题"><span class="nav-number">6.1.</span> <span class="nav-text">避免和处理死锁问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#定位死锁问题"><span class="nav-number">6.2.</span> <span class="nav-text">定位死锁问题</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缓存穿透"><span class="nav-number">2.</span> <span class="nav-text">缓存穿透</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是缓存穿透"><span class="nav-number">2.1.</span> <span class="nav-text">什么是缓存穿透</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会带来的问题"><span class="nav-number">2.2.</span> <span class="nav-text">会带来的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么解决"><span class="nav-number">2.3.</span> <span class="nav-text">怎么解决</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#怎么选择方案"><span class="nav-number">2.4.</span> <span class="nav-text">怎么选择方案</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缓存击穿"><span class="nav-number">3.</span> <span class="nav-text">缓存击穿</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是缓存击穿"><span class="nav-number">3.1.</span> <span class="nav-text">什么是缓存击穿</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#带来的问题"><span class="nav-number">3.2.</span> <span class="nav-text">带来的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决"><span class="nav-number">3.3.</span> <span class="nav-text">如何解决</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#缓存雪崩"><span class="nav-number">4.</span> <span class="nav-text">缓存雪崩</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是缓存雪崩"><span class="nav-number">4.1.</span> <span class="nav-text">什么是缓存雪崩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何解决-1"><span class="nav-number">4.2.</span> <span class="nav-text">如何解决</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#事前："><span class="nav-number">4.2.1.</span> <span class="nav-text">事前：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事中："><span class="nav-number">4.2.2.</span> <span class="nav-text">事中：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事后："><span class="nav-number">4.2.3.</span> <span class="nav-text">事后：</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
